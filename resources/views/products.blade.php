@@ -11,6 +11,31 @@
             </div>
         </div>
 
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto">
+                <form action="/products" method="GET">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" name="search" placeholder="Search products, categories..."
+                            value="{{ request('search') }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if(request('search'))
+            <div class="row mb-3">
+                <div class="col-12">
+                    <p class="text-muted">
+                        Showing results for "<strong>{{ request('search') }}</strong>"
+                        ({{ $products->total() }} {{ $products->total() == 1 ? 'product' : 'products' }} found)
+                    </p>
+                </div>
+            </div>
+        @endif
+
         <div class="row g-4">
             @forelse($products as $product)
                 <div class="col-md-6 col-lg-4">
@@ -35,11 +60,25 @@
                 <div class="col-12">
                     <div class="text-center py-5">
                         <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
-                        <h3>No products available</h3>
-                        <p class="text-muted">Please check back later.</p>
+                        <h3>No products found</h3>
+                        @if(request('search'))
+                            <p class="text-muted">Try searching with different keywords.</p>
+                        @else
+                            <p class="text-muted">Please check back later.</p>
+                        @endif
                     </div>
                 </div>
             @endforelse
         </div>
+
+        @if($products->hasPages())
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center">
+                        {{ $products->links() }}
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
