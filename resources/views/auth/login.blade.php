@@ -3,17 +3,17 @@
 @section('title', 'Login')
 
 @section('content')
-    <div class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="min-vh-100 d-flex align-items-center bg-primary">
         <div class="container py-4 py-md-5">
             <div class="row justify-content-center">
-                <div class="col-11 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+                <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
                     <!-- Header -->
                     <div class="text-center mb-3 mb-md-4">
                         <div class="bg-white rounded-circle d-inline-flex p-2 p-md-3 shadow-lg mb-2 mb-md-3">
                             <i class="fas fa-birthday-cake fa-2x fa-md-3x text-primary"></i>
                         </div>
                         <h2 class="text-white fw-bold fs-3 fs-md-2 mb-1 mb-md-2">Welcome Back!</h2>
-                        <p class="text-white-50 mb-0 small">Login to Po Bakery</p>
+                        <p class="text-white mb-0 small">Login to Po Bakery</p>
                     </div>
 
                     <!-- Card -->
@@ -48,8 +48,8 @@
                                         <input type="password"
                                             class="form-control form-control-lg @error('password') is-invalid @enderror"
                                             id="password" name="password" placeholder="Enter your password" required>
-                                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
-                                            <i class="fas fa-eye" id="toggleIcon"></i>
+                                        <button class="btn btn-outline-secondary" type="button" data-toggle-password="#password">
+                                            <i class="fas fa-eye"></i>
                                         </button>
                                         @error('password')
                                             <div class="invalid-feedback">
@@ -90,21 +90,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('toggleIcon');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
-        }
-    </script>
 @endsection

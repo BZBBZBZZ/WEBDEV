@@ -8,7 +8,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse text-center" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
@@ -37,8 +37,18 @@
                             
                             @if(Auth::user()->isAdmin())
                                 <li><hr class="dropdown-divider"></li>
+                                <li class="dropdown-header text-danger"><strong>ADMIN PANEL</strong></li>
                                 <li><a class="dropdown-item text-danger" href="{{ route('admin.users.index') }}">
                                     <i class="fas fa-users-cog me-2"></i>Manage Users
+                                </a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('admin.products.index') }}">
+                                    <i class="fas fa-box me-2"></i>Manage Products
+                                </a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('admin.categories.index') }}">
+                                    <i class="fas fa-list me-2"></i>Manage Categories
+                                </a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('admin.employees.index') }}">
+                                    <i class="fas fa-users me-2"></i>Manage Employees
                                 </a></li>
                             @endif
                             
@@ -56,7 +66,7 @@
                 @else
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-primary text-white ms-2" href="{{ route('register') }}">Register</a>
+                        <a class="nav-link btn btn-primary text-white d-inline-block" href="{{ route('register') }}">Register</a>
                     </li>
                 @endauth
             </ul>

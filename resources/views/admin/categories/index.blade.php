@@ -1,17 +1,17 @@
 @extends('layout.mainlayout')
 
-@section('title', 'Manage Users')
+@section('title', 'Manage Categories')
 
 @section('content')
     <div class="container py-5">
         <div class="row mb-4">
             <div class="col-md-6">
-                <h2><i class="fas fa-users-cog me-2 text-danger"></i>Manage Users</h2>
-                <p class="text-muted">Total Users: {{ $users->total() }}</p>
+                <h2><i class="fas fa-list me-2 text-success"></i>Manage Categories</h2>
+                <p class="text-muted">Total Categories: {{ $categories->total() }}</p>
             </div>
             <div class="col-md-6 text-md-end text-start">
-                <a href="{{ route('admin.users.create') }}" class="btn btn-danger">
-                    <i class="fas fa-plus me-2"></i>Add New User
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>Add New Category
                 </a>
             </div>
         </div>
@@ -38,61 +38,54 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Joined</th>
+                                <th>Products Count</th>
+                                <th>Created</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($users as $user)
+                            @forelse($categories as $category)
                                 <tr>
-                                    <td>{{ $user->id }}</td>
+                                    <td>{{ $category->id }}</td>
                                     <td>
-                                        <i class="fas fa-user me-2 text-primary"></i>
-                                        <strong>{{ $user->name }}</strong>
-                                        @if ($user->id === auth()->id())
-                                            <span class="badge bg-info ms-2">You</span>
-                                        @endif
+                                        <i class="fas fa-tag me-2 text-success"></i>
+                                        <strong>{{ $category->name }}</strong>
                                     </td>
-                                    <td>{{ $user->email }}</td>
                                     <td>
-                                        @if ($user->role === 'admin')
-                                            <span class="badge bg-danger">
-                                                <i class="fas fa-crown me-1"></i>Admin
-                                            </span>
-                                        @else
-                                            <span class="badge bg-secondary">User</span>
-                                        @endif
+                                        <span class="badge bg-info">{{ $category->products_count }} products</span>
                                     </td>
-                                    <td>{{ $user->created_at->format('d M Y') }}</td>
+                                    <td>{{ $category->created_at->format('d M Y') }}</td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <a href="{{ route('admin.users.show', $user) }}" class="btn btn-info">
+                                            <a href="{{ route('admin.categories.show', $category) }}" class="btn btn-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-warning">
+                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            @if ($user->id !== auth()->id())
-                                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                                            @if($category->products_count == 0)
+                                                <form action="{{ route('admin.categories.destroy', $category) }}" method="POST"
                                                     class="d-inline"
-                                                    onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                                    onsubmit="return confirm('Are you sure you want to delete this category?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
+                                            @else
+                                                <button class="btn btn-danger" disabled title="Cannot delete category with products">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             @endif
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4 text-muted">
-                                        <i class="fas fa-users fa-3x mb-3 d-block"></i>
-                                        No users found.
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="fas fa-list fa-3x mb-3 d-block"></i>
+                                        No categories found.
                                     </td>
                                 </tr>
                             @endforelse
@@ -103,7 +96,7 @@
         </div>
 
         <div class="mt-4">
-            {{ $users->links() }}
+            {{ $categories->links() }}
         </div>
     </div>
 @endsection
