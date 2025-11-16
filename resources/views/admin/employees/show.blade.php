@@ -12,7 +12,8 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="text-center mb-4">
-                            <img src="{{ $employee->image }}" alt="{{ $employee->name }}" class="img-fluid rounded-circle shadow"
+                            <img src="{{ $employee->image }}" alt="{{ $employee->name }}"
+                                class="img-fluid rounded-circle shadow"
                                 style="width: 200px; height: 200px; object-fit: cover;">
                         </div>
 

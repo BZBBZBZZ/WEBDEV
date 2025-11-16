@@ -8,7 +8,7 @@
             <div class="col-md-8">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
-                        <h4 class="mb-0"><i class="fas fa-plus me-2"></i>Add New Product</h4>
+                        <h4 class="mb-0"><i class="fas fa-box me-2"></i>Add New Product</h4>
                     </div>
                     <div class="card-body p-4">
                         <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
@@ -53,7 +53,9 @@
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <small class="text-muted">Accepted formats: JPEG, PNG, JPG, GIF</small>
+                                <small class="text-danger">
+                                    <i class="fas fa-exclamation-triangle me-1"></i><strong>Max 2MB</strong> | Accepted formats: JPEG, PNG, JPG, GIF
+                                </small>
                             </div>
 
                             <div class="mb-3">

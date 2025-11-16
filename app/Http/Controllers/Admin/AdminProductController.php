@@ -26,7 +26,7 @@ class AdminProductController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'short_description' => ['required', 'string'],
             'long_description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
@@ -62,7 +62,7 @@ class AdminProductController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'short_description' => ['required', 'string'],
             'long_description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],

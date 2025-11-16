@@ -45,7 +45,10 @@
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <small class="text-muted">Accepted formats: JPEG, PNG, JPG, GIF</small>
+                                <small class="text">
+                                    <i class="fas fa-exclamation-triangle me-1"></i><strong>Max 2MB</strong> | Accepted
+                                    formats: JPEG, PNG, JPG, GIF
+                                </small>
                             </div>
 
                             <div class="d-flex gap-2">

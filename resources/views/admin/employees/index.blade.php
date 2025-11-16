@@ -64,7 +64,8 @@
                                             <a href="{{ route('admin.employees.show', $employee) }}" class="btn btn-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-warning">
+                                            <a href="{{ route('admin.employees.edit', $employee) }}"
+                                                class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.employees.destroy', $employee) }}" method="POST"

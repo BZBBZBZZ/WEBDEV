@@ -32,7 +32,8 @@
                                     <i class="fas fa-briefcase me-2"></i>Position
                                 </label>
                                 <input type="text" class="form-control @error('position') is-invalid @enderror"
-                                    id="position" name="position" value="{{ old('position', $employee->position) }}" required>
+                                    id="position" name="position" value="{{ old('position', $employee->position) }}"
+                                    required>
                                 @error('position')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -47,13 +48,19 @@
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                <small class="text-danger">
+                                    <i class="fas fa-exclamation-triangle me-1"></i><strong>Max 2MB</strong> | Accepted
+                                    formats: JPEG, PNG, JPG, GIF
+                                </small>
+                                <br>
                                 <small class="text-muted">Leave empty to keep current photo</small>
 
                                 <div class="mt-2">
                                     <label class="form-label">Current Photo:</label>
                                     <div>
                                         <img src="{{ $employee->image }}" alt="{{ $employee->name }}"
-                                            class="img-thumbnail rounded-circle" style="max-width: 150px; max-height: 150px; object-fit: cover;">
+                                            class="img-thumbnail rounded-circle"
+                                            style="max-width: 150px; max-height: 150px; object-fit: cover;">
                                     </div>
                                 </div>
                             </div>

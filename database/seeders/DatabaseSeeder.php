@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             'role' => 'user',
         ]);
 
+        User::factory(30)->create();
+
         // Seed data lainnya
         $this->call([
             CategorySeeder::class,

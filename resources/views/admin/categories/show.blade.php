@@ -73,23 +73,23 @@
                         <hr class="my-4">
 
                         <div class="d-flex gap-2">
-                                <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning">
-                                    <i class="fas fa-edit me-2"></i>Edit Category
-                                </a>
-                                <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left me-2"></i>Back to List
-                                </a>
-                                @if ($category->products_count == 0)
-                                    <form action="{{ route('admin.categories.destroy', $category) }}" method="POST"
-                                        class="d-inline" onsubmit="return confirm('Are you sure?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fas fa-trash me-2"></i>Delete Category
-                                        </button>
-                                    </form>
-                                @endif
-                            </div>
+                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning">
+                                <i class="fas fa-edit me-2"></i>Edit Category
+                            </a>
+                            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to List
+                            </a>
+                            @if ($category->products_count == 0)
+                                <form action="{{ route('admin.categories.destroy', $category) }}" method="POST"
+                                    class="d-inline" onsubmit="return confirm('Are you sure?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash me-2"></i>Delete Category
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

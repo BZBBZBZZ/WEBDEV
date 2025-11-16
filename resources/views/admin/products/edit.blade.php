@@ -55,13 +55,18 @@
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                <small class="text">
+                                    <i class="fas fa-exclamation-triangle me-1"></i><strong>Max 2MB</strong> | Accepted
+                                    formats: JPEG, PNG, JPG, GIF
+                                </small>
+                                <br>
                                 <small class="text-muted">Leave empty to keep current image</small>
 
                                 <div class="mt-2">
                                     <label class="form-label">Current Image:</label>
                                     <div>
-                                        <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                                            class="img-thumbnail" style="max-width: 200px;">
+                                        <img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-thumbnail"
+                                            style="max-width: 200px;">
                                     </div>
                                 </div>
                             </div>
@@ -70,8 +75,8 @@
                                 <label for="short_description" class="form-label fw-semibold">
                                     <i class="fas fa-align-left me-2"></i>Short Description
                                 </label>
-                                <textarea class="form-control @error('short_description') is-invalid @enderror"
-                                    id="short_description" name="short_description" rows="2" required>{{ old('short_description', $product->short_description) }}</textarea>
+                                <textarea class="form-control @error('short_description') is-invalid @enderror" id="short_description"
+                                    name="short_description" rows="2" required>{{ old('short_description', $product->short_description) }}</textarea>
                                 @error('short_description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -81,8 +86,8 @@
                                 <label for="long_description" class="form-label fw-semibold">
                                     <i class="fas fa-align-justify me-2"></i>Long Description
                                 </label>
-                                <textarea class="form-control @error('long_description') is-invalid @enderror"
-                                    id="long_description" name="long_description" rows="4" required>{{ old('long_description', $product->long_description) }}</textarea>
+                                <textarea class="form-control @error('long_description') is-invalid @enderror" id="long_description"
+                                    name="long_description" rows="4" required>{{ old('long_description', $product->long_description) }}</textarea>
                                 @error('long_description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

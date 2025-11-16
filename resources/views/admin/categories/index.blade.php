@@ -60,12 +60,13 @@
                                             <a href="{{ route('admin.categories.show', $category) }}" class="btn btn-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning">
+                                            <a href="{{ route('admin.categories.edit', $category) }}"
+                                                class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            @if($category->products_count == 0)
-                                                <form action="{{ route('admin.categories.destroy', $category) }}" method="POST"
-                                                    class="d-inline"
+                                            @if ($category->products_count == 0)
+                                                <form action="{{ route('admin.categories.destroy', $category) }}"
+                                                    method="POST" class="d-inline"
                                                     onsubmit="return confirm('Are you sure you want to delete this category?')">
                                                     @csrf
                                                     @method('DELETE')
@@ -74,7 +75,8 @@
                                                     </button>
                                                 </form>
                                             @else
-                                                <button class="btn btn-danger" disabled title="Cannot delete category with products">
+                                                <button class="btn btn-danger" disabled
+                                                    title="Cannot delete category with products">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             @endif
