@@ -13,10 +13,13 @@ chmod 755 /app/database
 
 echo "✓ Database created"
 
-# Verify Vite assets exist
+# Verify and fix Vite manifest path
 echo "Checking Vite assets..."
 if [ -f "public/build/.vite/manifest.json" ]; then
-    echo "✓ Vite assets found"
+    echo "✓ Vite manifest found in .vite folder"
+    # Copy to root build folder
+    cp public/build/.vite/manifest.json public/build/manifest.json
+    echo "✓ Manifest copied to public/build/manifest.json"
 else
     echo "✗ Vite assets not found!"
     exit 1
