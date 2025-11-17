@@ -21,7 +21,7 @@
                     <h5>Details:</h5>
                     <p class="mb-4">{{ $product->long_description }}</p>
 
-                    <div class="mt-4">
+                    <div class="mt-3">
                         <a href="/products" class="btn btn-outline-primary">
                             <i class="fas fa-arrow-left me-2"></i>Back to Products
                         </a>
