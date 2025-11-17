@@ -22,23 +22,13 @@ else
     exit 1
 fi
 
-# Install node dependencies if not exists
-echo "===== Checking node_modules ====="
-if [ ! -d "node_modules" ]; then
-    echo "Installing npm dependencies..."
-    npm ci --include=dev
-fi
-
-# ALWAYS build assets in production
-echo "===== Building Vite assets ====="
-npm run build
-
-# Verify build succeeded
+# Verify Vite assets exist (should be pre-built and committed)
+echo "===== Checking Vite assets ====="
 if [ -f "public/build/manifest.json" ]; then
-    echo "✓ Vite build successful"
+    echo "✓ Vite assets found"
     cat public/build/manifest.json
 else
-    echo "✗ Vite manifest not found!"
+    echo "✗ Vite assets not found!"
     echo "Checking public/build directory:"
     ls -la public/build/ || echo "public/build directory not found"
     exit 1
