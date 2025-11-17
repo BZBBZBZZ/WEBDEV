@@ -33,7 +33,7 @@
                         <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Affordable prices</li>
                     </ul>
                     
-                    <div class="text-center mt-5">
+                    <div class="text-center mt-4">
                         <p class="text-muted">
                             <em>"My Time Has Come"</em>
                         </p>
