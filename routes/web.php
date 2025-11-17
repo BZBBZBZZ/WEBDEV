@@ -35,3 +35,38 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 require __DIR__.'/auth.php';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Route::get('employees', [\App\Http\Controllers\Admin\AdminEmployeeController::class, 'index'])->name('employees.index');
+// Route::get('employees/create', [\App\Http\Controllers\Admin\AdminEmployeeController::class, 'create'])->name('employees.create');
+// Route::post('employees', [\App\Http\Controllers\Admin\AdminEmployeeController::class, 'store'])->name('employees.store');
+// Route::get('employees/{employee}', [\App\Http\Controllers\Admin\AdminEmployeeController::class, 'show'])->name('employees.show');
+// Route::get('employees/{employee}/edit', [\App\Http\Controllers\Admin\AdminEmployeeController::class, 'edit'])->name('employees.edit');
+// Route::match(['put','patch'],'employees/{employee}', [\App\Http\Controllers\Admin\AdminEmployeeController::class, 'update'])->name('employees.update');
+// Route::delete('employees/{employee}', [\App\Http\Controllers\Admin\AdminEmployeeController::class, 'destroy'])->name('employees.destroy');

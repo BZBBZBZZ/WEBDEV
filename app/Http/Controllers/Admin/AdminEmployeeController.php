@@ -25,12 +25,11 @@ class AdminEmployeeController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'position' => ['required', 'string', 'max:255'],
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
         $data = $request->all();
 
-        // Upload image
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('employees', 'public');
             $data['image'] = '/storage/' . $imagePath;
@@ -57,14 +56,12 @@ class AdminEmployeeController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'position' => ['required', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
         $data = $request->all();
 
-        // Upload new image if provided
         if ($request->hasFile('image')) {
-            // Delete old image
             if ($employee->image && str_starts_with($employee->image, '/storage/')) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $employee->image));
             }
@@ -72,7 +69,7 @@ class AdminEmployeeController extends Controller
             $imagePath = $request->file('image')->store('employees', 'public');
             $data['image'] = '/storage/' . $imagePath;
         } else {
-            unset($data['image']); // Keep old image
+            unset($data['image']); 
         }
 
         $employee->update($data);
@@ -82,8 +79,7 @@ class AdminEmployeeController extends Controller
     }
 
     public function destroy(Employee $employee)
-    {
-        // Delete image file
+    {       
         if ($employee->image && str_starts_with($employee->image, '/storage/')) {
             Storage::disk('public')->delete(str_replace('/storage/', '', $employee->image));
         }
