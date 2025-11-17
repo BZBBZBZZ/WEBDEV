@@ -7,7 +7,6 @@
         <div class="container py-4 py-md-5">
             <div class="row justify-content-center">
                 <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-                    <!-- Header -->
                     <div class="text-center mb-3 mb-md-4">
                         <div class="bg-white rounded-circle d-inline-flex p-2 p-md-3 shadow-lg mb-2 mb-md-3">
                             <i class="fas fa-birthday-cake fa-2x fa-md-3x text-primary"></i>
@@ -16,14 +15,12 @@
                         <p class="text-white mb-0 small">Login to Po Bakery</p>
                     </div>
 
-                    <!-- Card -->
                     <div class="card shadow-lg border-0 rounded-4">
                         <div class="card-body p-3 p-sm-4 p-md-5">
 
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
 
-                                <!-- Email -->
                                 <div class="mb-3 mb-md-4">
                                     <label for="email" class="form-label fw-semibold small">
                                         <i class="fas fa-envelope text-primary me-1 me-md-2"></i>Email Address
@@ -39,7 +36,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- Password -->
                                 <div class="mb-3 mb-md-4">
                                     <label for="password" class="form-label fw-semibold small">
                                         <i class="fas fa-lock text-primary me-1 me-md-2"></i>Password
@@ -48,7 +44,8 @@
                                         <input type="password"
                                             class="form-control form-control-lg @error('password') is-invalid @enderror"
                                             id="password" name="password" placeholder="Enter your password" required>
-                                        <button class="btn btn-outline-secondary" type="button" data-toggle-password="#password">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            data-toggle-password="#password">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         @error('password')
@@ -59,17 +56,14 @@
                                     </div>
                                 </div>
 
-                                <!-- Login Button -->
                                 <button type="submit" class="btn btn-primary btn-lg w-100 mb-3 shadow">
                                     <i class="fas fa-sign-in-alt me-2"></i>Login
                                 </button>
 
-                                <!-- Divider -->
                                 <div class="text-center mb-3">
                                     <span class="text-muted small">OR</span>
                                 </div>
 
-                                <!-- Register Link -->
                                 <div class="text-center">
                                     <p class="mb-2 text-muted small">Don't have an account?</p>
                                     <a href="{{ route('register') }}" class="btn btn-outline-primary w-100">
@@ -79,7 +73,6 @@
                             </form>
                         </div>
 
-                        <!-- Back to Home -->
                         <div class="text-center mb-3 mb-md-5">
                             <a href="/" class="text-decoration-none small">
                                 <i class="fas fa-home me-1 me-md-2"></i>Back to Home

@@ -35,7 +35,6 @@ class AdminProductController extends Controller
 
         $data = $request->all();
 
-        // Upload image
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
             $data['image'] = '/storage/' . $imagePath;
@@ -71,9 +70,7 @@ class AdminProductController extends Controller
 
         $data = $request->all();
 
-        // Upload new image if provided
         if ($request->hasFile('image')) {
-            // Delete old image
             if ($product->image && str_starts_with($product->image, '/storage/')) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $product->image));
             }
@@ -81,7 +78,7 @@ class AdminProductController extends Controller
             $imagePath = $request->file('image')->store('products', 'public');
             $data['image'] = '/storage/' . $imagePath;
         } else {
-            unset($data['image']); // Keep old image
+            unset($data['image']);
         }
 
         $product->update($data);
@@ -92,7 +89,6 @@ class AdminProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Delete image file
         if ($product->image && str_starts_with($product->image, '/storage/')) {
             Storage::disk('public')->delete(str_replace('/storage/', '', $product->image));
         }

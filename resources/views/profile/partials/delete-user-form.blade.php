@@ -13,7 +13,6 @@
         <i class="fas fa-trash-alt me-2"></i>Delete Account
     </button>
 
-    <!-- Modal -->
     <div class="modal fade" id="confirmUserDeletionModal"
         data-has-errors="{{ $errors->userDeletion->any() ? 'true' : 'false' }}" tabindex="-1"
         aria-labelledby="confirmUserDeletionLabel" aria-hidden="true">

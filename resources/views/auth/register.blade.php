@@ -58,7 +58,8 @@
                                         <input type="password"
                                             class="form-control form-control-lg @error('password') is-invalid @enderror"
                                             id="password" name="password" placeholder="Create a password" required>
-                                        <button class="btn btn-outline-secondary" type="button" data-toggle-password="#password">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            data-toggle-password="#password">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         @error('password')
