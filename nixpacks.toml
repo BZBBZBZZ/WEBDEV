@@ -1,13 +1,20 @@
 [phases.setup]
-nixPkgs = ["php82", "php82Extensions.sqlite3", "php82Extensions.pdo_sqlite"]
+nixPkgs = ["php82", "php82Extensions.sqlite3", "php82Extensions.pdo_sqlite", "nodejs_20"]
 
 [phases.install]
 cmds = [
-    "mkdir -p /app/database",
-    "touch /app/database/database.sqlite",
-    "chmod 666 /app/database/database.sqlite",
-    "chmod 755 /app/database"
+    "mkdir -p database",
+    "touch database/database.sqlite",
+    "chmod 666 database/database.sqlite",
+    "chmod 755 database",
+    "npm ci --include=dev"
+]
+
+[phases.build]
+cmds = [
+    "composer install --no-dev --optimize-autoloader",
+    "npm run build"
 ]
 
 [start]
-cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
+cmd = "bash start.sh"

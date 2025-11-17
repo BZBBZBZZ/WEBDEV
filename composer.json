@@ -50,13 +50,7 @@
             "@php artisan migrate --graceful --ansi"
         ],
         "post-install-cmd": [
-            "@php -r \"echo 'Creating database directory...'.PHP_EOL; if (!file_exists('database')) { mkdir('database', 0755, true); echo 'Directory created'.PHP_EOL; } else { echo 'Directory exists'.PHP_EOL; }\"",
-            "@php -r \"echo 'Creating SQLite file...'.PHP_EOL; if (!file_exists('database/database.sqlite')) { touch('database/database.sqlite'); chmod('database/database.sqlite', 0666); echo 'SQLite file created'.PHP_EOL; } else { echo 'SQLite file exists'.PHP_EOL; }\"",
-            "@php -r \"echo 'Setting permissions...'.PHP_EOL; if (file_exists('database')) { chmod('database', 0755); } if (file_exists('database/database.sqlite')) { chmod('database/database.sqlite', 0666); }\"",
-            "@php artisan storage:link --force || echo 'Storage link skipped'",
-            "@php artisan migrate --force || echo 'Migration skipped'",
-            "@php artisan db:seed --force || echo 'Seeding skipped'",
-            "@php artisan optimize:clear || echo 'Cache clear skipped'"
+            "@php artisan storage:link --force || echo 'Storage link skipped'"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
