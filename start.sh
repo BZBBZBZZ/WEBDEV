@@ -13,17 +13,25 @@ chmod 755 /app/database
 
 echo "✓ Database created"
 
-# Verify and fix Vite manifest path
-echo "Checking Vite assets..."
+# ALWAYS copy manifest from .vite to root
+echo "Fixing Vite manifest path..."
 if [ -f "public/build/.vite/manifest.json" ]; then
-    echo "✓ Vite manifest found in .vite folder"
-    # Copy to root build folder
-    cp public/build/.vite/manifest.json public/build/manifest.json
-    echo "✓ Manifest copied to public/build/manifest.json"
+    cp -f public/build/.vite/manifest.json public/build/manifest.json
+    echo "✓ Manifest copied"
+    cat public/build/manifest.json
 else
-    echo "✗ Vite assets not found!"
+    echo "⚠ Manifest not found in .vite folder"
+fi
+
+# Verify manifest exists
+if [ ! -f "public/build/manifest.json" ]; then
+    echo "✗ CRITICAL: Manifest not found at public/build/manifest.json"
+    echo "Checking public/build structure:"
+    ls -la public/build/
     exit 1
 fi
+
+echo "✓ Manifest verified at public/build/manifest.json"
 
 # Storage link
 php artisan storage:link --force || echo "Storage link skipped"
