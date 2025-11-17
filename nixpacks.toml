@@ -3,6 +3,7 @@ nixPkgs = ["php82", "php82Extensions.sqlite3", "php82Extensions.pdo_sqlite"]
 
 [phases.install]
 cmds = [
+    "echo '=== Installing Composer dependencies ==='",
     "composer install --no-dev --optimize-autoloader --no-interaction"
 ]
 
