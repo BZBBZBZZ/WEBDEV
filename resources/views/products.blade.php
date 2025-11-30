@@ -40,15 +40,40 @@
             @forelse($products as $product)
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm">
-                        <img src="{{ $product->image }}" class="card-img-top" alt="{{ $product->name }}"
-                            style="height: 250px; object-fit: cover;">
+                        <div class="position-relative">
+                            <img src="{{ $product->image }}" class="card-img-top" alt="{{ $product->name }}"
+                                style="height: 250px; object-fit: cover;">
+                            @if($product->activePromo())
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-danger fs-6">
+                                        <i class="fas fa-tag me-1"></i>{{ $product->activePromo()->discount_percentage }}% OFF
+                                    </span>
+                                </div>
+                            @endif
+                        </div>
                         <div class="card-body d-flex flex-column">
                             <span class="badge bg-primary mb-2 align-self-start">{{ $product->category->name }}</span>
+                            @if($product->activePromo())
+                                <span class="badge bg-success mb-2 align-self-start">{{ $product->activePromo()->name }}</span>
+                            @endif
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text flex-grow-1">{{ $product->short_description }}</p>
                             <div class="d-flex justify-content-between align-items-center mt-auto">
-                                <span class="h5 mb-0 text-success">Rp
-                                    {{ number_format($product->price, 0, ',', '.') }}</span>
+                                <div>
+                                    @if($product->activePromo())
+                                        <div>
+                                            <span class="text-decoration-line-through text-muted">
+                                                Rp {{ number_format($product->price, 0, ',', '.') }}
+                                            </span>
+                                            <br>
+                                            <span class="h5 mb-0 text-success">
+                                                Rp {{ number_format($product->getDiscountedPrice(), 0, ',', '.') }}
+                                            </span>
+                                        </div>
+                                    @else
+                                        <span class="h5 mb-0 text-success">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                                    @endif
+                                </div>
                                 <a href="/products/{{ $product->id }}" class="btn btn-primary">
                                     <i class="fas fa-eye me-1"></i>Details
                                 </a>

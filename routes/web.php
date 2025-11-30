@@ -3,11 +3,15 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminEmployeeController;
+use App\Http\Controllers\Admin\AdminPromoController;
+use App\Http\Controllers\Admin\AdminLocationController;
+use App\Http\Controllers\Admin\AdminCustomOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
@@ -16,6 +20,7 @@ Route::get('/contact-us', [HomeController::class, 'contactUs']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{product}', [ProductController::class, 'show']);
 Route::get('/employees', [EmployeeController::class, 'index']);
+Route::get('/locations', [LocationController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -32,6 +37,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('products', AdminProductController::class);
     Route::resource('categories', AdminCategoryController::class);
     Route::resource('employees', AdminEmployeeController::class);
+    Route::resource('promos', AdminPromoController::class);
+    Route::resource('locations', AdminLocationController::class);
+    Route::resource('custom-orders', AdminCustomOrderController::class);
 });
 
 require __DIR__.'/auth.php';

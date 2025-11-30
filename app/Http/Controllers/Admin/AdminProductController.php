@@ -30,6 +30,7 @@ class AdminProductController extends Controller
             'short_description' => ['required', 'string'],
             'long_description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
+            'weight' => ['nullable', 'numeric', 'min:0'],
             'category_id' => ['required', 'exists:categories,id'],
         ]);
 
@@ -65,6 +66,7 @@ class AdminProductController extends Controller
             'short_description' => ['required', 'string'],
             'long_description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
+            'weight' => ['nullable', 'numeric', 'min:0'],
             'category_id' => ['required', 'exists:categories,id'],
         ]);
 

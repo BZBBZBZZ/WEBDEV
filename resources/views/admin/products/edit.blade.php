@@ -93,7 +93,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <label for="price" class="form-label fw-semibold">
                                     <i class="fas fa-dollar-sign me-2"></i>Price (Rp)
                                 </label>
@@ -103,6 +103,19 @@
                                 @error('price')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="weight" class="form-label fw-semibold">
+                                    <i class="fas fa-weight me-2"></i>Weight (grams)
+                                </label>
+                                <input type="number" class="form-control @error('weight') is-invalid @enderror"
+                                    id="weight" name="weight" value="{{ old('weight', $product->weight) }}" 
+                                    min="0" step="0.01">
+                                @error('weight')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">Optional - Enter product weight in grams</small>
                             </div>
 
                             <div class="d-flex gap-2">

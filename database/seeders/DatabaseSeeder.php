@@ -26,11 +26,13 @@ class DatabaseSeeder extends Seeder
 
         User::factory(30)->create();
 
-        // Seed data lainnya
         $this->call([
             CategorySeeder::class,
             ProductSeeder::class,
             EmployeeSeeder::class,
+            PromoSeeder::class,
+            LocationSeeder::class,
+            CustomOrderSeeder::class,
         ]);
     }
 }

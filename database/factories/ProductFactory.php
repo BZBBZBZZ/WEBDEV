@@ -43,6 +43,7 @@ class ProductFactory extends Factory
             'short_description' => fake()->sentence(10),
             'long_description' => fake()->paragraphs(3, true),
             'price' => fake()->numberBetween(10000, 150000),
+            'weight' => fake()->numberBetween(50, 500) ,
         ];
     }
 }

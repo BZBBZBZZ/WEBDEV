@@ -13,6 +13,7 @@
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
                 <li class="nav-item"><a class="nav-link" href="/employees">Our Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="/locations">Locations</a></li>
                 <li class="nav-item"><a class="nav-link" href="/about-us">About Us</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact-us">Contact</a></li>
             </ul>
@@ -49,6 +50,15 @@
                                 </a></li>
                                 <li><a class="dropdown-item text-danger" href="{{ route('admin.employees.index') }}">
                                     <i class="fas fa-users me-2"></i>Manage Employees
+                                </a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('admin.promos.index') }}">
+                                    <i class="fas fa-tags me-2"></i>Manage Promos
+                                </a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('admin.locations.index') }}">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Manage Locations
+                                </a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('admin.custom-orders.index') }}">
+                                    <i class="fas fa-clipboard-list me-2"></i>Custom Orders
                                 </a></li>
                             @endif
                             
