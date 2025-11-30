@@ -1,11 +1,12 @@
 @extends('layout.mainlayout')
 
+
 @section('title', 'Promo Details')
 
 @section('content')
     <div class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card shadow-sm">
                     <div class="card-header bg-info text-white">
                         <h4 class="mb-0"><i class="fas fa-tag me-2"></i>Promo Details</h4>
@@ -66,16 +67,49 @@
                             <div class="row g-3">
                                 @foreach ($promo->products as $product)
                                     <div class="col-md-6">
-                                        <div class="card">
+                                        <div class="card h-100">
                                             <div class="card-body">
                                                 <h6 class="card-title">{{ $product->name }}</h6>
                                                 <p class="card-text small text-muted mb-2">{{ $product->category->name }}</p>
-                                                <div class="d-flex align-items-center gap-2">
+                                                
+                                                {{-- Tampilkan semua promo untuk produk ini --}}
+                                                @php
+                                                    $allActivePromos = $product->activePromos();
+                                                    $totalDiscount = $product->getTotalDiscount();
+                                                @endphp
+                                                
+                                                @if($allActivePromos->count() > 1)
+                                                    <div class="mb-2">
+                                                        <small class="text-info">
+                                                            <i class="fas fa-info-circle me-1"></i>
+                                                            This product has <strong>{{ $allActivePromos->count() }} active promos</strong>:
+                                                        </small>
+                                                        <div class="mt-1">
+                                                            @foreach($allActivePromos as $activePromo)
+                                                                <span class="badge bg-danger me-1 mb-1">
+                                                                    {{ $activePromo->name }} ({{ $activePromo->discount_percentage }}%)
+                                                                </span>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                                
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
                                                     <span class="text-decoration-line-through text-muted">
                                                         Rp {{ number_format($product->price, 0, ',', '.') }}
                                                     </span>
+                                                    <i class="fas fa-arrow-right text-muted"></i>
                                                     <span class="text-success fw-bold">
                                                         Rp {{ number_format($product->getDiscountedPrice(), 0, ',', '.') }}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="mt-2">
+                                                    <span class="badge bg-success">
+                                                        Total Discount: {{ $totalDiscount }}%
+                                                    </span>
+                                                    <span class="badge bg-info">
+                                                        Save: Rp {{ number_format($product->price - $product->getDiscountedPrice(), 0, ',', '.') }}
                                                     </span>
                                                 </div>
                                             </div>

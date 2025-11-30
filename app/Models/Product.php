@@ -29,20 +29,52 @@ class Product extends Model
         return $this->belongsToMany(Promo::class, 'product_promo');
     }
 
-    public function activePromo()
+    public function activePromos()
     {
         return $this->promos()
             ->whereDate('start_date', '<=', now())
             ->whereDate('end_date', '>=', now())
-            ->first();
+            ->get();
+    }
+
+    public function getTotalDiscount()
+    {
+        $activePromos = $this->activePromos();
+        
+        if ($activePromos->isEmpty()) {
+            return 0;
+        }
+
+        $totalDiscount = $activePromos->sum('discount_percentage');
+        
+        return min($totalDiscount, 100);
     }
 
     public function getDiscountedPrice()
     {
-        $promo = $this->activePromo();
-        if ($promo) {
-            return $this->price - ($this->price * $promo->discount_percentage / 100);
+        $totalDiscount = $this->getTotalDiscount();
+        
+        if ($totalDiscount == 0) {
+            return $this->price;
         }
-        return $this->price;
+        
+        $discountAmount = $this->price * ($totalDiscount / 100);
+        
+        return max(0, $this->price - $discountAmount);
+    }
+
+    public function hasActivePromo()
+    {
+        return $this->activePromos()->isNotEmpty();
+    }
+
+    public function getFormattedPrice()
+    {
+        return 'Rp ' . number_format($this->price, 0, ',', '.');
+    }
+
+    public function getFormattedDiscountedPrice()
+    {
+        return 'Rp ' . number_format($this->getDiscountedPrice(), 0, ',', '.');
     }
 }
