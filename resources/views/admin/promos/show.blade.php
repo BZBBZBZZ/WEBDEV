@@ -72,7 +72,6 @@
                                                 <h6 class="card-title">{{ $product->name }}</h6>
                                                 <p class="card-text small text-muted mb-2">{{ $product->category->name }}</p>
                                                 
-                                                {{-- Tampilkan semua promo untuk produk ini --}}
                                                 @php
                                                     $allActivePromos = $product->activePromos();
                                                     $totalDiscount = $product->getTotalDiscount();
