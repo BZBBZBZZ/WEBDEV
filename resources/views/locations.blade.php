@@ -2,6 +2,10 @@
 
 @section('title', 'Our Locations')
 
+@push('styles')
+    @vite('resources/css/locations.css')
+@endpush
+
 @section('content')
     <div class="container py-5">
         <div class="text-center mb-5">
@@ -40,15 +44,4 @@
             </div>
         @endif
     </div>
-
-    <style>
-        .hover-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .hover-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-    </style>
 @endsection
