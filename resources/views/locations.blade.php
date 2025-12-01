@@ -2,10 +2,6 @@
 
 @section('title', 'Our Locations')
 
-@push('styles')
-    @vite('resources/css/locations.css')
-@endpush
-
 @section('content')
     <div class="container py-5">
         <div class="text-center mb-5">
