@@ -208,7 +208,7 @@ class CheckoutController extends Controller
         }
     }
 
-    // ✅ BUY NOW
+    // ✅ FIX BUY NOW METHOD
     public function buyNow(Request $request)
     {
         $request->validate([
@@ -216,7 +216,7 @@ class CheckoutController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
-        $product = Product::findOrFail($request->product_id);
+        $product = Product::with('category')->findOrFail($request->product_id);
 
         session(['buy_now' => [
             'product_id' => $product->id,
@@ -227,7 +227,9 @@ class CheckoutController extends Controller
         $subtotal = $product->getDiscountedPrice() * $request->quantity;
         $provinces = $this->rajaOngkirService->getProvinces();
 
-        return view('checkout.buy-now', compact('product', 'totalWeight', 'subtotal', 'provinces'));
+        // ✅ PASS $product dan $quantity ke view (seperti checkout index)
+        return view('checkout.buy-now', compact('product', 'totalWeight', 'subtotal', 'provinces'))
+            ->with('quantity', $request->quantity);
     }
 
     // ✅ PROCESS BUY NOW
@@ -251,7 +253,7 @@ class CheckoutController extends Controller
             $buyNowData = session('buy_now');
 
             if (!$buyNowData) {
-                return redirect()->route('products.index')
+                return redirect('/products')
                     ->with('error', 'No product selected for purchase.');
             }
 
