@@ -9,31 +9,45 @@ use Illuminate\Http\Request;
 
 class AdminTransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::with(['user', 'payment'])
-                                    ->latest()
-                                    ->paginate(15);
+        $query = Transaction::with(['user', 'details.product']);
+
+        // ✅ Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // ✅ Search by order ID or customer name
+        if ($request->filled('search')) {
+            $query->where(function($q) use ($request) {
+                $q->where('transaction_code', 'like', '%' . $request->search . '%')
+                  ->orWhere('customer_name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $transactions = $query->latest()->paginate(15);
 
         return view('admin.transactions.index', compact('transactions'));
     }
 
     public function show(Transaction $transaction)
     {
-        $transaction->load(['user', 'details.product', 'payment']);
+        $transaction->load(['user', 'details.product']);
 
         return view('admin.transactions.show', compact('transaction'));
     }
 
-    // Update status transaksi (shipped, completed)
+    // ✅ Update transaction status
     public function updateStatus(Request $request, Transaction $transaction)
     {
         $request->validate([
-            'status' => 'required|in:pending,paid,cancelled,shipped,completed',
+            'status' => 'required|in:pending,processing,shipped,completed,cancelled',
         ]);
 
         $transaction->update(['status' => $request->status]);
 
-        return back()->with('success', 'Transaction status updated!');
+        return redirect()->back()
+            ->with('success', 'Transaction status updated successfully!');
     }
 }

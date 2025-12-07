@@ -1,12 +1,10 @@
-@extends('layout.admin')
+@extends('layout.mainlayout')
 
 @section('title', 'Manage Transactions')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="fas fa-cash-register me-2"></i>All Transactions</h2>
-        </div>
+    <div class="container py-5">
+        <h2 class="mb-4"><i class="fas fa-cash-register me-2"></i>All Transactions</h2>
 
         {{-- Filter --}}
         <div class="card shadow-sm mb-4">

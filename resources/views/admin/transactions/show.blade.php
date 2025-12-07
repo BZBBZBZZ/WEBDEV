@@ -1,9 +1,9 @@
-@extends('layout.admin')
+@extends('layout.mainlayout')
 
 @section('title', 'Transaction Detail')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2><i class="fas fa-file-invoice me-2"></i>Transaction #{{ $transaction->id }}</h2>
             <a href="{{ route('admin.transactions.index') }}" class="btn btn-outline-secondary">
@@ -140,19 +140,19 @@
                     </div>
                 </div>
 
-                {{-- Payment Info --}}
+                {{-- Order Summary --}}
                 <div class="card shadow-sm">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="fas fa-money-bill-wave me-2"></i>Payment Summary</h5>
+                        <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>Order Summary</h5>
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Subtotal:</span>
-                            <span>Rp {{ number_format($transaction->subtotal, 0, ',', '.') }}</span>
+                            <strong>Rp {{ number_format($transaction->subtotal, 0, ',', '.') }}</strong>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span>Shipping:</span>
-                            <span>Rp {{ number_format($transaction->shipping_cost, 0, ',', '.') }}</span>
+                            <strong>Rp {{ number_format($transaction->shipping_cost, 0, ',', '.') }}</strong>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between mb-3">
