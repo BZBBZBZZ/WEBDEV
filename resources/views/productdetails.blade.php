@@ -87,6 +87,51 @@
                         <p class="text-muted">{{ $product->long_description }}</p>
                     </div>
 
+                    @auth
+                    <div class="mb-4">
+                        <h5 class="mb-3">
+                            <i class="fas fa-shopping-cart me-2"></i>Purchase
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Quantity</label>
+                            <div class="input-group" style="max-width: 200px;">
+                                <button type="button" class="btn btn-outline-secondary" id="decreaseQty">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" class="form-control text-center" id="quantity" value="1" min="1" readonly>
+                                <button type="button" class="btn btn-outline-secondary" id="increaseQty">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {{-- Add to Cart Form --}}
+                        <form action="{{ route('cart.store') }}" method="POST" id="addToCartForm" class="mb-2">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" id="cartQuantity" value="1">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </form>
+
+                        {{-- ✅ Buy Now Form --}}
+                        <form action="{{ route('checkout.buy-now') }}" method="GET" id="buyNowForm">
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" id="buyQuantity" value="1">
+                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-bolt me-2"></i>Buy Now
+                            </button>
+                        </form>
+                    </div>
+                    @else
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Please <a href="{{ route('login') }}" class="alert-link">login</a> to purchase this product.
+                    </div>
+                    @endauth
+
                     <div class="border-top pt-4 mt-4">
                         <a href="/products" class="btn btn-outline-primary btn-lg">
                             <i class="fas fa-arrow-left me-2"></i>Back to Products
@@ -96,4 +141,34 @@
             </div>
         </div>
     </div>
+
+    @auth
+    @push('scripts')
+    <script>
+        const quantityInput = document.getElementById('quantity');
+        const cartQuantityInput = document.getElementById('cartQuantity');
+        const buyQuantityInput = document.getElementById('buyQuantity');
+        
+        document.getElementById('increaseQty').addEventListener('click', function() {
+            let value = parseInt(quantityInput.value);
+            quantityInput.value = value + 1;
+            updateHiddenInputs();
+        });
+        
+        document.getElementById('decreaseQty').addEventListener('click', function() {
+            let value = parseInt(quantityInput.value);
+            if (value > 1) {
+                quantityInput.value = value - 1;
+                updateHiddenInputs();
+            }
+        });
+        
+        function updateHiddenInputs() {
+            const qty = quantityInput.value;
+            cartQuantityInput.value = qty;
+            buyQuantityInput.value = qty; // ✅ Update buy now quantity juga
+        }
+    </script>
+    @endpush
+    @endauth
 @endsection

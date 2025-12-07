@@ -12,4 +12,9 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    resolve: {
+        alias: {
+            '~bootstrap': 'node_modules/bootstrap',
+        }
+    },
 });

@@ -20,6 +20,23 @@
 
             <ul class="navbar-nav ms-auto">
                 @auth
+                    {{-- Cart & Orders Links --}}
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{{ route('cart.index') }}">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            @if(Auth::user()->carts->count() > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                                    {{ Auth::user()->carts->sum('quantity') }}
+                                </span>
+                            @endif
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('transactions.index') }}">
+                            <i class="fas fa-receipt"></i> My Orders
+                        </a>
+                    </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,6 +73,9 @@
                                 </a></li>
                                 <li><a class="dropdown-item text-danger" href="{{ route('admin.locations.index') }}">
                                     <i class="fas fa-map-marker-alt me-2"></i>Manage Locations
+                                </a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('admin.transactions.index') }}">
+                                    <i class="fas fa-cash-register me-2"></i>Manage Transactions
                                 </a></li>
                                 <li><a class="dropdown-item text-danger" href="{{ route('admin.custom-orders.index') }}">
                                     <i class="fas fa-clipboard-list me-2"></i>Custom Orders

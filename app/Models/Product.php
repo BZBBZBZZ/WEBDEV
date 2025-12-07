@@ -19,6 +19,11 @@ class Product extends Model
         'category_id'
     ];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'weight' => 'integer',
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -29,18 +34,24 @@ class Product extends Model
         return $this->belongsToMany(Promo::class, 'product_promo');
     }
 
-    public function activePromos()
+    // ✅ Relationship query builder (untuk whereHas, exists, dll)
+    public function activePromosQuery()
     {
         return $this->promos()
             ->whereDate('start_date', '<=', now())
-            ->whereDate('end_date', '>=', now())
-            ->get();
+            ->whereDate('end_date', '>=', now());
+    }
+
+    // ✅ Get collection of active promos (untuk @foreach)
+    public function activePromos()
+    {
+        return $this->activePromosQuery()->get();
     }
 
     public function getTotalDiscount()
     {
         $activePromos = $this->activePromos();
-        
+
         if ($activePromos->isEmpty()) {
             return 0;
         }
@@ -55,17 +66,17 @@ class Product extends Model
         $totalDiscount = $this->getTotalDiscount();
         
         if ($totalDiscount == 0) {
-            return $this->price;
+            return (float) $this->price; // ✅ Cast ke float
         }
         
         $discountAmount = $this->price * ($totalDiscount / 100);
         
-        return max(0, $this->price - $discountAmount);
+        return (float) max(0, $this->price - $discountAmount); // ✅ Cast ke float
     }
 
     public function hasActivePromo()
     {
-        return $this->activePromos()->isNotEmpty();
+        return $this->activePromosQuery()->exists();
     }
 
     public function getFormattedPrice()
