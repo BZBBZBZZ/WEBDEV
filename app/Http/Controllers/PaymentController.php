@@ -143,6 +143,7 @@ class PaymentController extends Controller
 
             // ✅ Check payment status dari Midtrans
             try {
+                /** @var object $status Midtrans transaction status object */
                 $status = $this->midtransService->getTransactionStatus($orderId);
                 
                 Log::info('=== MIDTRANS STATUS CHECK ===', [
@@ -199,12 +200,15 @@ class PaymentController extends Controller
     public function checkStatus(Transaction $transaction)
     {
         try {
+            /** @var object $status Midtrans transaction status object */
             $status = $this->midtransService->getTransactionStatus($transaction->transaction_code);
             
-            return response()->json([
-                'status' => $status->transaction_status,
-                'payment_type' => $status->payment_type ?? null,
-            ]);
+            if (in_array($status->transaction_status, ['capture', 'settlement'])) {
+                return response()->json([
+                    'status' => $status->transaction_status,
+                    'payment_type' => $status->payment_type ?? null,
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Check status error: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to check status'], 500);
