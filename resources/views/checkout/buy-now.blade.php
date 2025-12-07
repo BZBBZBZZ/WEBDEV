@@ -230,16 +230,21 @@ async function calculateShipping() {
         return;
     }
 
+    console.log('🚀 Calculating shipping...', { destination: destinationDistrict, weight: totalWeight });
+
     const courierOptionsDiv = document.getElementById('courier-options');
     courierOptionsDiv.innerHTML = '<div class="text-center"><div class="spinner-border text-primary"></div><p class="mt-2">Loading...</p></div>';
 
     try {
-        const response = await fetch('{{ route("checkout.calculate-shipping") }}', {
+        const url = `${window.location.origin}/checkout/calculate-shipping`;
+        
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
+                'ngrok-skip-browser-warning': 'true' // ✅ TAMBAHKAN INI untuk skip ngrok warning!
             },
             body: JSON.stringify({
                 destination_district: destinationDistrict,
@@ -247,11 +252,16 @@ async function calculateShipping() {
             })
         });
 
-        const result = await response.json();
+        console.log('✅ Response status:', response.status);
 
         if (!response.ok) {
-            throw new Error(result.message || 'Server error');
+            const errorText = await response.text();
+            console.error('❌ Server error:', errorText);
+            throw new Error(`Server error: ${response.status}`);
         }
+
+        const result = await response.json();
+        console.log('✅ Response:', result);
 
         if (result.success && result.costs && result.costs.length > 0) {
             displayCourierOptions(result.costs);
@@ -259,8 +269,8 @@ async function calculateShipping() {
             courierOptionsDiv.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>No courier available</div>';
         }
     } catch (error) {
-        console.error('❌ Error:', error);
-        courierOptionsDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-circle me-2"></i>${error.message}</div>`;
+        console.error('❌ Fetch Error:', error);
+        courierOptionsDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-circle me-2"></i>Network error: ${error.message}</div>`;
     }
 }
 

@@ -76,13 +76,17 @@ class PaymentController extends Controller
                 'payment_type' => $notification['payment_type'],
             ]);
 
-            // Handle different transaction statuses
+            // ✅ HANDLE DIFFERENT TRANSACTION STATUSES
             if ($notification['transaction_status'] == 'capture') {
                 if ($notification['fraud_status'] == 'accept') {
                     $transaction->update([
                         'payment_status' => 'paid',
                         'paid_at' => now(),
                         'status' => 'processing',
+                    ]);
+                    
+                    Log::info('Payment Captured & Accepted', [
+                        'transaction_code' => $transaction->transaction_code,
                     ]);
                 }
             } elseif ($notification['transaction_status'] == 'settlement') {
@@ -91,13 +95,39 @@ class PaymentController extends Controller
                     'paid_at' => now(),
                     'status' => 'processing',
                 ]);
-            } elseif (in_array($notification['transaction_status'], ['cancel', 'deny', 'expire'])) {
+                
+                Log::info('Payment Settled', [
+                    'transaction_code' => $transaction->transaction_code,
+                ]);
+            } elseif ($notification['transaction_status'] == 'expire') {
+                // ✅ EXPIRED - Auto cancel order
+                $transaction->update([
+                    'payment_status' => 'expired',
+                    'status' => 'cancelled', // ✅ AUTO CANCEL
+                ]);
+                
+                Log::info('Transaction Expired & Cancelled', [
+                    'transaction_code' => $transaction->transaction_code,
+                    'expired_at' => now()
+                ]);
+            } elseif (in_array($notification['transaction_status'], ['cancel', 'deny'])) {
+                // ✅ FAILED - Auto cancel order
                 $transaction->update([
                     'payment_status' => 'failed',
+                    'status' => 'cancelled', // ✅ AUTO CANCEL
+                ]);
+                
+                Log::info('Payment Failed & Order Cancelled', [
+                    'transaction_code' => $transaction->transaction_code,
+                    'reason' => $notification['transaction_status']
                 ]);
             } elseif ($notification['transaction_status'] == 'pending') {
                 $transaction->update([
                     'payment_status' => 'pending',
+                ]);
+                
+                Log::info('Payment Pending', [
+                    'transaction_code' => $transaction->transaction_code,
                 ]);
             }
 
