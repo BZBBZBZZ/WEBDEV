@@ -7,6 +7,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
 use App\Services\RajaOngkirService;
 use App\Services\MidtransService;
+use App\Services\FonnteService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
         // Midtrans Service
         $this->app->singleton(MidtransService::class, function ($app) {
             return new MidtransService();
+        });
+
+        // Fonnte Service
+        $this->app->singleton(FonnteService::class, function ($app) {
+            return new FonnteService();
         });
     }
 

@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Services\MidtransService;
+use App\Services\FonnteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
     protected $midtransService;
+    protected $fonnteService;
 
-    public function __construct(MidtransService $midtransService)
+    public function __construct(MidtransService $midtransService, FonnteService $fonnteService)
     {
         $this->midtransService = $midtransService;
+        $this->fonnteService = $fonnteService;
     }
 
     // Halaman payment
@@ -76,6 +79,8 @@ class PaymentController extends Controller
                 'payment_type' => $notification['payment_type'],
             ]);
 
+            $wasSent = false;
+
             // ✅ HANDLE DIFFERENT TRANSACTION STATUSES
             if ($notification['transaction_status'] == 'capture') {
                 if ($notification['fraud_status'] == 'accept') {
@@ -84,6 +89,8 @@ class PaymentController extends Controller
                         'paid_at' => now(),
                         'status' => 'processing',
                     ]);
+                    
+                    $wasSent = true;
                     
                     Log::info('Payment Captured & Accepted', [
                         'transaction_code' => $transaction->transaction_code,
@@ -95,6 +102,8 @@ class PaymentController extends Controller
                     'paid_at' => now(),
                     'status' => 'processing',
                 ]);
+                
+                $wasSent = true;
                 
                 Log::info('Payment Settled', [
                     'transaction_code' => $transaction->transaction_code,
@@ -129,6 +138,12 @@ class PaymentController extends Controller
                 Log::info('Payment Pending', [
                     'transaction_code' => $transaction->transaction_code,
                 ]);
+            }
+
+            // ✅ Send WhatsApp notification if payment is paid
+            if ($wasSent) {
+                $transaction->load('details');
+                $this->fonnteService->notifyNewOrder($transaction);
             }
 
             Log::info('=== TRANSACTION UPDATED ===', [

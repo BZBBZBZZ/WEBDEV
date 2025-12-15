@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Admin\AdminPromoController;
 use App\Http\Controllers\Admin\AdminLocationController;
 use App\Http\Controllers\Admin\AdminCustomOrderController;
 use App\Http\Controllers\Admin\AdminTransactionController;
+use App\Http\Controllers\Admin\AdminTestimonialController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
@@ -27,6 +29,9 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/employees', [EmployeeController::class, 'index']);
 Route::get('/locations', [LocationController::class, 'index']);
+
+// Testimonials Routes (Public)
+Route::get('/testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
@@ -74,6 +79,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [TransactionController::class, 'index'])->name('index');
         Route::get('/{transaction}', [TransactionController::class, 'show'])->name('show');
     });
+
+    // Testimonials Routes (Auth)
+    Route::prefix('testimonials')->name('testimonials.')->group(function () {
+        Route::get('/create', [TestimonialController::class, 'create'])->name('create');
+        Route::post('/', [TestimonialController::class, 'store'])->name('store');
+        Route::get('/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('edit');
+        Route::put('/{testimonial}', [TestimonialController::class, 'update'])->name('update');
+        Route::delete('/{testimonial}', [TestimonialController::class, 'destroy'])->name('destroy');
+    });
 });
 
 // Midtrans Callback (tanpa auth)
@@ -94,6 +108,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/', [AdminTransactionController::class, 'index'])->name('index');
         Route::get('/{transaction}', [AdminTransactionController::class, 'show'])->name('show');
         Route::put('/{transaction}/status', [AdminTransactionController::class, 'updateStatus'])->name('update-status');
+    });
+
+    // Admin Testimonials
+    Route::prefix('testimonials')->name('testimonials.')->group(function () {
+        Route::get('/', [AdminTestimonialController::class, 'index'])->name('index');
+        Route::delete('/{testimonial}', [AdminTestimonialController::class, 'destroy'])->name('destroy');
     });
 });
 
