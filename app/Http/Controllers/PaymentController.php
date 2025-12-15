@@ -74,14 +74,12 @@ class PaymentController extends Controller
                 return response()->json(['message' => 'Transaction not found'], 404);
             }
 
-            // Update payment info
             $transaction->update([
                 'payment_type' => $notification['payment_type'],
             ]);
 
             $wasSent = false;
 
-            // ✅ HANDLE DIFFERENT TRANSACTION STATUSES
             if ($notification['transaction_status'] == 'capture') {
                 if ($notification['fraud_status'] == 'accept') {
                     $transaction->update([
@@ -108,28 +106,6 @@ class PaymentController extends Controller
                 Log::info('Payment Settled', [
                     'transaction_code' => $transaction->transaction_code,
                 ]);
-            } elseif ($notification['transaction_status'] == 'expire') {
-                // ✅ EXPIRED - Auto cancel order
-                $transaction->update([
-                    'payment_status' => 'expired',
-                    'status' => 'cancelled', // ✅ AUTO CANCEL
-                ]);
-                
-                Log::info('Transaction Expired & Cancelled', [
-                    'transaction_code' => $transaction->transaction_code,
-                    'expired_at' => now()
-                ]);
-            } elseif (in_array($notification['transaction_status'], ['cancel', 'deny'])) {
-                // ✅ FAILED - Auto cancel order
-                $transaction->update([
-                    'payment_status' => 'failed',
-                    'status' => 'cancelled', // ✅ AUTO CANCEL
-                ]);
-                
-                Log::info('Payment Failed & Order Cancelled', [
-                    'transaction_code' => $transaction->transaction_code,
-                    'reason' => $notification['transaction_status']
-                ]);
             } elseif ($notification['transaction_status'] == 'pending') {
                 $transaction->update([
                     'payment_status' => 'pending',
@@ -138,12 +114,27 @@ class PaymentController extends Controller
                 Log::info('Payment Pending', [
                     'transaction_code' => $transaction->transaction_code,
                 ]);
+            } elseif (in_array($notification['transaction_status'], ['deny', 'cancel', 'expire'])) {
+                $transaction->update([
+                    'payment_status' => 'failed',
+                ]);
+                
+                Log::info('Payment Failed/Cancelled/Expired', [
+                    'transaction_code' => $transaction->transaction_code,
+                    'reason' => $notification['transaction_status']
+                ]);
             }
 
             // ✅ Send WhatsApp notification if payment is paid
             if ($wasSent) {
-                $transaction->load('details');
-                $this->fonnteService->notifyNewOrder($transaction);
+                // ✅ Dispatch job to queue with initial 2 second delay
+                \App\Jobs\SendWhatsAppNotification::dispatch($transaction)
+                    ->delay(now()->addSeconds(2));
+                
+                Log::info('WhatsApp notification queued', [
+                    'transaction_code' => $transaction->transaction_code,
+                    'scheduled_at' => now()->addSeconds(2)->format('H:i:s')
+                ]);
             }
 
             Log::info('=== TRANSACTION UPDATED ===', [
@@ -193,31 +184,17 @@ class PaymentController extends Controller
                 
                 Log::info('=== MIDTRANS STATUS CHECK ===', [
                     'order_id' => $orderId,
-                    'transaction_status' => $status->transaction_status,
-                    'payment_type' => $status->payment_type ?? null,
+                    'status' => $status->transaction_status
                 ]);
 
-                // Update transaction based on status
-                if ($status->transaction_status == 'settlement' || $status->transaction_status == 'capture') {
-                    $transaction->update([
-                        'payment_status' => 'paid',
-                        'paid_at' => now(),
-                        'status' => 'processing',
-                        'payment_type' => $status->payment_type ?? $transaction->payment_type,
-                    ]);
-                    
+                if (in_array($status->transaction_status, ['capture', 'settlement'])) {
                     $message = 'Payment successful! Your order is being processed.';
                     $type = 'success';
-                } elseif (in_array($status->transaction_status, ['pending'])) {
-                    $transaction->update([
-                        'payment_status' => 'pending',
-                        'payment_type' => $status->payment_type ?? $transaction->payment_type,
-                    ]);
-                    
+                } elseif ($status->transaction_status == 'pending') {
                     $message = 'Payment is pending. Please complete your payment.';
                     $type = 'warning';
                 } else {
-                    $message = 'Payment status: ' . $status->transaction_status;
+                    $message = 'Payment ' . $status->transaction_status . '. Please check your order status.';
                     $type = 'info';
                 }
             } catch (\Exception $e) {
@@ -250,13 +227,23 @@ class PaymentController extends Controller
             
             if (in_array($status->transaction_status, ['capture', 'settlement'])) {
                 return response()->json([
-                    'status' => $status->transaction_status,
-                    'payment_type' => $status->payment_type ?? null,
+                    'success' => true,
+                    'status' => 'paid',
+                    'redirect' => route('transactions.show', $transaction)
                 ]);
             }
+
+            return response()->json([
+                'success' => true,
+                'status' => $status->transaction_status
+            ]);
+
         } catch (\Exception $e) {
-            Log::error('Check status error: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to check status'], 500);
+            Log::error('Check Status Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to check status'
+            ], 500);
         }
     }
 }
