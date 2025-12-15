@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Admin\AdminPromoController;
 use App\Http\Controllers\Admin\AdminLocationController;
 use App\Http\Controllers\Admin\AdminCustomOrderController;
 use App\Http\Controllers\Admin\AdminTransactionController;
+use App\Http\Controllers\Admin\AdminTestimonialController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
@@ -54,7 +56,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/process', [CheckoutController::class, 'process'])->name('process');
         Route::get('/buy-now', [CheckoutController::class, 'buyNow'])->name('buy-now');
         Route::post('/buy-now-process', [CheckoutController::class, 'processBuyNow'])->name('buy-now-process');
-        
+
         // ✅ AJAX ROUTES
         Route::get('/cities/{province_id}', [CheckoutController::class, 'getCities'])->name('cities');
         Route::get('/districts/{city_id}', [CheckoutController::class, 'getDistricts'])->name('districts');
@@ -74,7 +76,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [TransactionController::class, 'index'])->name('index');
         Route::get('/{transaction}', [TransactionController::class, 'show'])->name('show');
     });
+
+    // ✅ Testimonial Routes (User)
+    Route::prefix('testimonials')->name('testimonials.')->group(function () {
+        Route::get('/create', [TestimonialController::class, 'create'])->name('create');
+        Route::post('/', [TestimonialController::class, 'store'])->name('store');
+        Route::get('/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('edit');
+        Route::put('/{testimonial}', [TestimonialController::class, 'update'])->name('update');
+        Route::delete('/{testimonial}', [TestimonialController::class, 'destroy'])->name('destroy');
+    });
 });
+
+// ✅ Testimonial Index (Public - semua orang bisa lihat)
+Route::get('/testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
 
 // Midtrans Callback (tanpa auth)
 Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
@@ -88,13 +102,19 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('promos', AdminPromoController::class);
     Route::resource('locations', AdminLocationController::class);
     Route::resource('custom-orders', AdminCustomOrderController::class);
-    
+
     // Admin Transaction Routes
     Route::prefix('transactions')->name('transactions.')->group(function () {
         Route::get('/', [AdminTransactionController::class, 'index'])->name('index');
         Route::get('/{transaction}', [AdminTransactionController::class, 'show'])->name('show');
         Route::put('/{transaction}/status', [AdminTransactionController::class, 'updateStatus'])->name('update-status');
     });
+
+    // ✅ Admin Testimonial Routes
+    Route::prefix('testimonials')->name('testimonials.')->group(function () {
+        Route::get('/', [AdminTestimonialController::class, 'index'])->name('index');
+        Route::delete('/{testimonial}', [AdminTestimonialController::class, 'destroy'])->name('destroy');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

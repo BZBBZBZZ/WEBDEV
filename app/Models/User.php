@@ -48,4 +48,23 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function testimonial()
+    {
+        return $this->hasOne(Testimonial::class);
+    }
+
+    // ✅ Check if user can create testimonial
+    public function canCreateTestimonial(): bool
+    {
+        // User sudah punya testimoni = tidak bisa bikin lagi
+        if ($this->testimonial) {
+            return false;
+        }
+
+        // Cek apakah user punya minimal 1 transaksi yang paid
+        return $this->transactions()
+            ->where('payment_status', 'paid')
+            ->exists();
+    }
 }
