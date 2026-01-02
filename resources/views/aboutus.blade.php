@@ -7,14 +7,14 @@
     <div class="row">
         <div class="col-lg-8 mx-auto">
             <div class="text-center mb-5">
-                <h1 class="display-5 fw-bold">About Po Bakery</h1>
+                <h1 class="display-5 fw-bold">About Fiori Bakery & Patisery</h1>
             </div>
             
             <div class="card shadow-sm">
                 <div class="card-body p-5">
                     <h3 class="text-primary mb-4">Our Story</h3>
                     <p class="lead mb-4">
-                        Po Bakery has been serving the community with fresh, delicious baked goods since Jesus descended to town. 
+                        Fiori Bakery & Patisery has been serving the community with fresh, delicious baked goods since Jesus descended to town. 
                         What started as a small family business has grown into a beloved local bakery.
                     </p>
                     

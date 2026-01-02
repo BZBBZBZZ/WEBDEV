@@ -12,7 +12,7 @@
                             <i class="fas fa-birthday-cake fa-2x fa-md-3x text-primary"></i>
                         </div>
                         <h2 class="text-white fw-bold fs-3 fs-md-2 mb-1 mb-md-2">Welcome Back!</h2>
-                        <p class="text-white mb-0 small">Login to Po Bakery</p>
+                        <p class="text-white mb-0 small">Login to Fiori Bakery & Patisery</p>
                     </div>
 
                     <div class="card shadow-lg border-0 rounded-4">

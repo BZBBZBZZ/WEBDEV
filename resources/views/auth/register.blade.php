@@ -11,7 +11,7 @@
                         <div class="bg-white rounded-circle d-inline-flex p-2 p-md-3 shadow-lg mb-2 mb-md-3">
                             <i class="fas fa-birthday-cake fa-2x fa-md-3x text-danger"></i>
                         </div>
-                        <h2 class="text-white fw-bold fs-3 fs-md-2 mb-1 mb-md-2">Join Po Bakery!</h2>
+                        <h2 class="text-white fw-bold fs-3 fs-md-2 mb-1 mb-md-2">Join Fiori Bakery & Patisery!</h2>
                         <p class="text-white mb-0 small">Create your account to get started</p>
                     </div>
 

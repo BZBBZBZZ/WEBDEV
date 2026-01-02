@@ -8,7 +8,7 @@
             <div class="col-lg-8 mx-auto">
                 <div class="text-center mb-5">
                     <h1 class="display-5 fw-bold">Contact Us</h1>
-                    <p class="text-muted">Get in touch with Po Bakery</p>
+                    <p class="text-muted">Get in touch with Fiori Bakery & Patisery</p>
                 </div>
 
                 <div class="row g-4">
@@ -31,7 +31,7 @@
 
                                 <div class="mb-3">
                                     <h6><i class="fas fa-envelope text-primary me-2"></i>Email</h6>
-                                    <p class="text-muted mb-0">pobakery@gmail.com</p>
+                                    <p class="text-muted mb-0">fioribakerypatisery@gmail.com</p>
                                 </div>
 
                                 <div class="mb-3">

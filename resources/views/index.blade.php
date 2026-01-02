@@ -7,7 +7,7 @@
         <div class="row mb-5">
             <div class="col-12 text-center">
                 <h1 class="display-4 fw-bold text-primary">
-                    <i class="fas fa-birthday-cake me-3"></i>Welcome to Po Bakery
+                    <i class="fas fa-birthday-cake me-3"></i>Welcome to Fiori Bakery & Patisery
                 </h1>
                 <p class="lead text-muted">Fresh baked goods made daily with love and the finest ingredients</p>
             </div>
