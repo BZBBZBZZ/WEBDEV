@@ -5,7 +5,6 @@
 
     <form method="post" action="{{ route('profile.update') }}">
         @csrf
-        @method('put')
 
         <div class="mb-3">
             <label for="name" class="form-label">
