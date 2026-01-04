@@ -3,11 +3,17 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Generator as Faker;
 
 class ProductFactory extends Factory
 {
     public function definition(): array
     {
+        // Ensure faker is initialized
+        if (!$this->faker) {
+            $this->faker = app(Faker::class);
+        }
+
         $bakeryItems = [
             'Croissant', 'Donut', 'Bagel', 'Muffin', 'Cupcake',
             'Bread Roll', 'Danish', 'Eclair', 'Pretzel', 'Scone',
