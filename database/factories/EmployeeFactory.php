@@ -23,8 +23,8 @@ class EmployeeFactory extends Factory
         ];
 
         return [
-            'name' => fake()->name(),
-            'position' => fake()->randomElement($positions),
+            'name' => $this->faker->name(),
+            'position' => $this->faker->randomElement($positions),
             'image' => "https://picsum.photos/seed/" . uniqid() . "/400/400",
         ];
     }
