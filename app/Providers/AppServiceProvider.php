@@ -25,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
         
-        // FORCE HTTPS UNTUK NGROK
-        if (config('app.env') === 'production' || str_contains(config('app.url'), 'ngrok')) {
+        // Force HTTPS in production
+        if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
     }
