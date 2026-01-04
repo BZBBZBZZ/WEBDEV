@@ -7,29 +7,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
-use Faker\Generator as Faker;
 
 class UserFactory extends Factory
 {
     protected $model = User::class;
-
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $password;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
-        // Ensure faker is initialized
-        if (!$this->faker) {
-            $this->faker = app(Faker::class);
-        }
-
         $firstNames = ['Ahmad', 'Budi', 'Citra', 'Dewi', 'Eka', 'Fajar', 'Gita', 'Hendra', 'Indah', 'Joko'];
         $lastNames = ['Pratama', 'Santoso', 'Wijaya', 'Kusuma', 'Permana', 'Saputra', 'Lestari', 'Hidayat', 'Rahayu', 'Setiawan'];
         
@@ -47,9 +32,6 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
