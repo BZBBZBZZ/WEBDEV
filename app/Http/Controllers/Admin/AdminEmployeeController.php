@@ -31,8 +31,8 @@ class AdminEmployeeController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('employees', env('FILESYSTEM_DISK', 'public'));
-            $data['image'] = Storage::url($imagePath);
+            $imagePath = $request->file('image')->store('employees', 'public');
+            $data['image'] = '/storage/' . $imagePath;
         }
 
         Employee::create($data);
@@ -62,14 +62,12 @@ class AdminEmployeeController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($employee->image) {
-                $oldPath = str_replace(Storage::url(''), '', $employee->image);
-                Storage::disk(env('FILESYSTEM_DISK', 'public'))->delete($oldPath);
+            if ($employee->image && str_starts_with($employee->image, '/storage/')) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $employee->image));
             }
 
-            $imagePath = $request->file('image')->store('employees', env('FILESYSTEM_DISK', 'public'));
-            $data['image'] = Storage::url($imagePath);
+            $imagePath = $request->file('image')->store('employees', 'public');
+            $data['image'] = '/storage/' . $imagePath;
         } else {
             unset($data['image']); 
         }
@@ -82,9 +80,8 @@ class AdminEmployeeController extends Controller
 
     public function destroy(Employee $employee)
     {       
-        if ($employee->image) {
-            $oldPath = str_replace(Storage::url(''), '', $employee->image);
-            Storage::disk(env('FILESYSTEM_DISK', 'public'))->delete($oldPath);
+        if ($employee->image && str_starts_with($employee->image, '/storage/')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $employee->image));
         }
 
         $employee->delete();

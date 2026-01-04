@@ -31,8 +31,8 @@ class AdminLocationController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('locations', env('FILESYSTEM_DISK', 'public'));
-            $data['image'] = Storage::url($imagePath);
+            $imagePath = $request->file('image')->store('locations', 'public');
+            $data['image'] = '/storage/' . $imagePath;
         }
 
         Location::create($data);
@@ -62,14 +62,12 @@ class AdminLocationController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($location->image) {
-                $oldPath = str_replace(Storage::url(''), '', $location->image);
-                Storage::disk(env('FILESYSTEM_DISK', 'public'))->delete($oldPath);
+            if ($location->image && str_starts_with($location->image, '/storage/')) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $location->image));
             }
 
-            $imagePath = $request->file('image')->store('locations', env('FILESYSTEM_DISK', 'public'));
-            $data['image'] = Storage::url($imagePath);
+            $imagePath = $request->file('image')->store('locations', 'public');
+            $data['image'] = '/storage/' . $imagePath;
         } else {
             unset($data['image']);
         }
@@ -82,9 +80,8 @@ class AdminLocationController extends Controller
 
     public function destroy(Location $location)
     {
-        if ($location->image) {
-            $oldPath = str_replace(Storage::url(''), '', $location->image);
-            Storage::disk(env('FILESYSTEM_DISK', 'public'))->delete($oldPath);
+        if ($location->image && str_starts_with($location->image, '/storage/')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $location->image));
         }
 
         $location->delete();
