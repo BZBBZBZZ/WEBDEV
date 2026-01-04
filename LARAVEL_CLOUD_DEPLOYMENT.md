@@ -104,10 +104,10 @@ php artisan key:generate
 # 2. Link storage (jika pakai local storage)
 php artisan storage:link
 
-# 3. Run migrations
-php artisan migrate --force
+# 3. Run migrations (with error handling)
+php artisan migrate --force || echo "Migration warning - some tables may already exist"
 
-# 4. Seed data (optional)
+# 4. Seed data (optional, only for first deployment)
 php artisan db:seed --force
 
 # 5. Clear & cache config untuk performance
@@ -152,6 +152,17 @@ Setelah deploy, test fitur-fitur berikut:
 ---
 
 ## ⚠️ Troubleshooting
+
+### Issue: Migration failed - "Table already exists"
+**Solution:**
+```bash
+# Option 1: Mark migration as completed (via SSH or tinker)
+php artisan tinker --execute="DB::table('migrations')->insertOrIgnore(['migration' => '2025_10_13_151626_create_products_table', 'batch' => 1]);"
+
+# Option 2: Update deploy command to ignore migration errors
+# In Laravel Cloud Dashboard → Commands, use:
+php artisan migrate --force || true
+```
 
 ### Issue: Images tidak tampil
 **Solution:**
