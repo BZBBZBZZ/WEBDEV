@@ -21,7 +21,6 @@
 
             <ul class="navbar-nav ms-auto">
                 @auth
-                    {{-- Cart & Orders Links --}}
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="{{ route('cart.index') }}">
                             <i class="fas fa-shopping-cart"></i> Cart

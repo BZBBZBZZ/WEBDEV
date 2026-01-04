@@ -15,7 +15,6 @@ return new class extends Migration
             $table->integer('quantity')->default(1);
             $table->timestamps();
             
-            // Satu user tidak bisa punya produk yang sama lebih dari 1 row
             $table->unique(['user_id', 'product_id']);
         });
     }

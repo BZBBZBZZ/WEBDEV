@@ -11,7 +11,7 @@ class RajaOngkirService
 {
     private $apiKey;
     private $baseUrl;
-    private $cacheLifetime = 86400; // 24 hours in seconds
+    private $cacheLifetime = 86400;
 
     public function __construct()
     {
@@ -19,12 +19,8 @@ class RajaOngkirService
         $this->baseUrl = rtrim(config('services.rajaongkir.base_url'), '/') . '/';
     }
 
-    /**
-     * Get cached data or fetch from API
-     */
     private function getCachedOrFetch($cacheKey, $apiCall)
     {
-        // Check cache
         $cached = DB::table('rajaongkir_cache')
             ->where('cache_key', $cacheKey)
             ->where('cached_at', '>', Carbon::now()->subSeconds($this->cacheLifetime))
@@ -35,11 +31,9 @@ class RajaOngkirService
             return json_decode($cached->cache_value, true);
         }
 
-        // Fetch from API
         Log::info('RajaOngkir Cache Miss - Fetching from API', ['key' => $cacheKey]);
         $data = $apiCall();
 
-        // Store in cache
         if (!empty($data)) {
             DB::table('rajaongkir_cache')->updateOrInsert(
                 ['cache_key' => $cacheKey],
@@ -54,9 +48,6 @@ class RajaOngkirService
         return $data;
     }
 
-    /**
-     * Get all provinces
-     */
     public function getProvinces()
     {
         return $this->getCachedOrFetch('provinces', function () {
@@ -85,13 +76,10 @@ class RajaOngkirService
         });
     }
 
-    /**
-     * Get cities by province ID
-     */
     public function getCitiesByProvince($provinceId)
     {
         $cacheKey = "cities_province_{$provinceId}";
-        
+
         return $this->getCachedOrFetch($cacheKey, function () use ($provinceId) {
             try {
                 $response = Http::timeout(30)
@@ -119,13 +107,10 @@ class RajaOngkirService
         });
     }
 
-    /**
-     * Get districts by city ID
-     */
     public function getDistrictsByCity($cityId)
     {
         $cacheKey = "districts_city_{$cityId}";
-        
+
         return $this->getCachedOrFetch($cacheKey, function () use ($cityId) {
             try {
                 $response = Http::timeout(30)
@@ -134,8 +119,7 @@ class RajaOngkirService
 
                 if ($response->successful()) {
                     $data = $response->json();
-                    // ✅ Clean: hanya return id dan name saja
-                    return array_map(function($district) {
+                    return array_map(function ($district) {
                         return [
                             'id' => $district['id'],
                             'name' => $district['name']
@@ -159,9 +143,6 @@ class RajaOngkirService
         });
     }
 
-    /**
-     * Calculate shipping cost - NO CACHE (always fresh)
-     */
     public function calculateShippingCost($originDistrictId, $destinationDistrictId, $weight, $couriers = null)
     {
         try {
@@ -208,9 +189,9 @@ class RajaOngkirService
 
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 $formattedCosts = [];
-                
+
                 if (isset($data['data']) && is_array($data['data'])) {
                     foreach ($data['data'] as $service) {
                         $formattedCosts[] = [
@@ -224,7 +205,7 @@ class RajaOngkirService
                     }
                 }
 
-                usort($formattedCosts, function($a, $b) {
+                usort($formattedCosts, function ($a, $b) {
                     return $a['cost'] - $b['cost'];
                 });
 
@@ -254,17 +235,11 @@ class RajaOngkirService
         }
     }
 
-    /**
-     * Get origin district ID for Magelang
-     */
     public function getMagelangDistrictId()
     {
         return config('services.rajaongkir.origin_district_id', 3732);
     }
 
-    /**
-     * Clear cache - untuk admin atau debugging
-     */
     public function clearCache($cacheKey = null)
     {
         if ($cacheKey) {

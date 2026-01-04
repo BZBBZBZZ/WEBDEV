@@ -19,7 +19,6 @@ class Cart extends Model
         'quantity' => 'integer',
     ];
 
-    // ✅ Append accessor ke array
     protected $appends = ['subtotal'];
 
     public function user()
@@ -32,25 +31,18 @@ class Cart extends Model
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * ✅ Get subtotal (price * quantity dengan discount)
-     */
     public function getSubtotalAttribute()
     {
         if (!$this->product) {
             return 0;
         }
 
-        // ✅ Cast ke float untuk memastikan kalkulasi benar
         $price = (float) $this->product->getDiscountedPrice();
         $quantity = (int) $this->quantity;
 
         return $price * $quantity;
     }
 
-    /**
-     * Get formatted subtotal
-     */
     public function getFormattedSubtotalAttribute()
     {
         return 'Rp ' . number_format($this->subtotal, 0, ',', '.');

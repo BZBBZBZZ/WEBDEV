@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('product_name'); // Snapshot nama produk saat dibeli
+            $table->string('product_name'); 
             $table->integer('quantity');
-            $table->decimal('price', 10, 2); // Snapshot harga saat dibeli
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }

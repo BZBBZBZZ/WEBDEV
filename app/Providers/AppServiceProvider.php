@@ -10,25 +10,17 @@ use App\Services\MidtransService;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        // RajaOngkir Service
         $this->app->singleton(RajaOngkirService::class, function ($app) {
             return new RajaOngkirService();
         });
 
-        // Midtrans Service
         $this->app->singleton(MidtransService::class, function ($app) {
             return new MidtransService();
         });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         Paginator::useBootstrapFive();

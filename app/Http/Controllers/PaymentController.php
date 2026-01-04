@@ -16,20 +16,17 @@ class PaymentController extends Controller
         $this->midtransService = $midtransService;
     }
 
-    // Halaman payment
     public function show(Transaction $transaction)
     {
         try {
-            // ✅ VALIDASI: Cek apakah transaction punya detail
             if ($transaction->details->isEmpty()) {
                 return redirect()->route('cart.index')
                     ->with('error', 'Transaction has no items!');
             }
 
-            // ✅ Generate snap token jika belum ada
             if (!$transaction->snap_token) {
                 $snapToken = $this->midtransService->createTransaction($transaction);
-                
+
                 $transaction->update([
                     'snap_token' => $snapToken
                 ]);
@@ -39,7 +36,6 @@ class PaymentController extends Controller
                 'transaction' => $transaction,
                 'clientKey' => config('services.midtrans.client_key')
             ]);
-
         } catch (\Exception $e) {
             Log::error('=== PAYMENT SHOW ERROR ===', [
                 'transaction_id' => $transaction->id,
@@ -54,29 +50,25 @@ class PaymentController extends Controller
         }
     }
 
-    // Webhook dari Midtrans
     public function callback(Request $request)
     {
         try {
             Log::info('=== MIDTRANS CALLBACK RECEIVED ===', $request->all());
 
-            // ✅ AMBIL DATA LANGSUNG DARI REQUEST (NO API CALL)
             $orderId = $request->input('order_id');
             $transactionStatus = $request->input('transaction_status');
             $fraudStatus = $request->input('fraud_status');
             $paymentType = $request->input('payment_type');
             $signatureKey = $request->input('signature_key');
 
-            // ✅ VALIDASI SIGNATURE (Security check)
             $serverKey = config('services.midtrans.server_key');
             $hashed = hash('sha512', $orderId . $request->input('status_code') . $request->input('gross_amount') . $serverKey);
-            
+
             if ($hashed !== $signatureKey) {
                 Log::error('Invalid signature key');
                 return response()->json(['message' => 'Invalid signature'], 403);
             }
 
-            // ✅ FIND TRANSACTION
             $transaction = Transaction::where('transaction_code', $orderId)->first();
 
             if (!$transaction) {
@@ -84,7 +76,6 @@ class PaymentController extends Controller
                 return response()->json(['message' => 'Transaction not found'], 404);
             }
 
-            // ✅ UPDATE STATUS BERDASARKAN DATA CALLBACK
             if (in_array($transactionStatus, ['capture', 'settlement'])) {
                 if ($fraudStatus == 'accept') {
                     $transaction->update([
@@ -93,7 +84,7 @@ class PaymentController extends Controller
                         'status' => 'processing',
                         'payment_type' => $paymentType,
                     ]);
-                    
+
                     Log::info('Payment Success', [
                         'transaction_code' => $transaction->transaction_code,
                     ]);
@@ -116,7 +107,6 @@ class PaymentController extends Controller
             ]);
 
             return response()->json(['message' => 'OK']);
-
         } catch (\Exception $e) {
             Log::error('=== MIDTRANS CALLBACK ERROR ===', [
                 'message' => $e->getMessage(),
@@ -127,7 +117,6 @@ class PaymentController extends Controller
         }
     }
 
-    // Finish page after payment (redirect from Midtrans)
     public function finish(Request $request)
     {
         try {
@@ -147,13 +136,10 @@ class PaymentController extends Controller
                     ->with('error', 'Transaction not found!');
             }
 
-            // ✅ TUNGGU SEBENTAR UNTUK CALLBACK
             sleep(2);
-            
-            // ✅ RELOAD DATA DARI DATABASE
+
             $transaction->refresh();
 
-            // ✅ CEK STATUS DARI DATABASE (BUKAN API)
             if ($transaction->payment_status === 'paid') {
                 $message = 'Payment successful! Your order is being processed.';
                 $type = 'success';
@@ -167,7 +153,6 @@ class PaymentController extends Controller
 
             return redirect()->route('transactions.index')
                 ->with($type, $message);
-
         } catch (\Exception $e) {
             Log::error('=== PAYMENT FINISH ERROR ===', [
                 'message' => $e->getMessage(),
@@ -178,19 +163,16 @@ class PaymentController extends Controller
         }
     }
 
-    // Status check untuk polling dari frontend
     public function checkStatus(Transaction $transaction)
     {
         try {
-            // ✅ FIX: CEK STATUS DARI DATABASE, BUKAN DARI API MIDTRANS!
-            $transaction->refresh(); // Reload dari database
-            
+            $transaction->refresh();
+
             return response()->json([
                 'status' => $transaction->status,
                 'payment_status' => $transaction->payment_status,
                 'payment_type' => $transaction->payment_type ?? null,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Check status error: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to check status'], 500);

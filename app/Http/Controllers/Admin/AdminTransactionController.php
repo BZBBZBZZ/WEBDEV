@@ -1,5 +1,4 @@
 <?php
-// filepath: app/Http/Controllers/Admin/AdminTransactionController.php
 
 namespace App\Http\Controllers\Admin;
 
@@ -13,16 +12,14 @@ class AdminTransactionController extends Controller
     {
         $query = Transaction::with(['user', 'details.product']);
 
-        // ✅ Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // ✅ Search by order ID or customer name
         if ($request->filled('search')) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('transaction_code', 'like', '%' . $request->search . '%')
-                  ->orWhere('customer_name', 'like', '%' . $request->search . '%');
+                    ->orWhere('customer_name', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -38,7 +35,6 @@ class AdminTransactionController extends Controller
         return view('admin.transactions.show', compact('transaction'));
     }
 
-    // ✅ Update transaction status
     public function updateStatus(Request $request, Transaction $transaction)
     {
         $request->validate([

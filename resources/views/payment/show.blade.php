@@ -19,7 +19,6 @@
 
                         <hr>
 
-                        {{-- Order Details --}}
                         <div class="mb-4">
                             <h6 class="fw-bold mb-3"><i class="fas fa-box me-2"></i>Order Details</h6>
                             @foreach($transaction->details as $detail)
@@ -36,7 +35,6 @@
 
                         <hr>
 
-                        {{-- Shipping Address --}}
                         <div class="mb-4">
                             <h6 class="fw-bold mb-2"><i class="fas fa-map-marker-alt me-2"></i>Shipping Address</h6>
                             <p class="mb-1">{{ $transaction->customer_address }}</p>
@@ -45,7 +43,6 @@
 
                         <hr>
 
-                        {{-- Payment Button --}}
                         <div class="text-center">
                             @if(isset($midtransError))
                                 <div class="alert alert-danger mb-3">
@@ -111,7 +108,6 @@
             @endif
         });
 
-        // Auto check payment status every 5 seconds
         setInterval(function() {
             fetch('{{ route("payment.check-status", $transaction) }}')
                 .then(response => response.json())

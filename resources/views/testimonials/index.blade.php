@@ -11,7 +11,7 @@
             </div>
             <div class="col-md-4 text-end">
                 @auth
-                    @if(Auth::user()->testimonial)
+                    @if (Auth::user()->testimonial)
                         <a href="{{ route('testimonials.edit', Auth::user()->testimonial) }}" class="btn btn-warning">
                             <i class="fas fa-edit me-2"></i>Edit My Testimonial
                         </a>
@@ -24,29 +24,29 @@
             </div>
         </div>
 
-        @if(session('success'))
+        @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show">
                 <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
-        @if(session('error'))
+        @if (session('error'))
             <div class="alert alert-danger alert-dismissible fade show">
                 <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
-        @if($testimonials->count() > 0)
+        @if ($testimonials->count() > 0)
             <div class="row g-4">
-                @foreach($testimonials as $testimonial)
+                @foreach ($testimonials as $testimonial)
                     <div class="col-md-6">
                         <div class="card shadow-sm h-100">
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
-                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" 
-                                         style="width: 50px; height: 50px;">
+                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 50px; height: 50px;">
                                         <i class="fas fa-user fa-2x text-white"></i>
                                     </div>
                                     <div class="ms-3">
@@ -54,7 +54,7 @@
                                         <small class="text-muted">{{ $testimonial->created_at->format('d M Y') }}</small>
                                     </div>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <i class="fas fa-quote-left text-primary me-2"></i>
                                     <p class="mb-0 text-muted">{{ $testimonial->testimonial }}</p>
@@ -62,15 +62,15 @@
                                 </div>
 
                                 @auth
-                                    @if($testimonial->user_id === Auth::id())
+                                    @if ($testimonial->user_id === Auth::id())
                                         <div class="d-flex gap-2">
-                                            <a href="{{ route('testimonials.edit', $testimonial) }}" class="btn btn-sm btn-warning">
+                                            <a href="{{ route('testimonials.edit', $testimonial) }}"
+                                                class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>
-                                            <form action="{{ route('testimonials.destroy', $testimonial) }}" 
-                                                  method="POST" 
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('Are you sure you want to delete your testimonial?')">
+                                            <form action="{{ route('testimonials.destroy', $testimonial) }}" method="POST"
+                                                class="d-inline"
+                                                onsubmit="return confirm('Are you sure you want to delete your testimonial?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">
@@ -95,7 +95,7 @@
                 <h4 class="text-muted">No testimonials yet</h4>
                 <p class="text-muted">Be the first to share your experience!</p>
                 @auth
-                    @if(Auth::user()->canCreateTestimonial())
+                    @if (Auth::user()->canCreateTestimonial())
                         <a href="{{ route('testimonials.create') }}" class="btn btn-primary mt-3">
                             <i class="fas fa-plus me-2"></i>Write First Testimonial
                         </a>

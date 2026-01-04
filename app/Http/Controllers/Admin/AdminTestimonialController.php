@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class AdminTestimonialController extends Controller
 {
-    // Admin list semua testimoni
     public function index()
     {
         $testimonials = Testimonial::with('user')
@@ -18,7 +17,6 @@ class AdminTestimonialController extends Controller
         return view('admin.testimonials.index', compact('testimonials'));
     }
 
-    // Admin delete testimoni
     public function destroy(Testimonial $testimonial)
     {
         $testimonial->delete();

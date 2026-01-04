@@ -14,7 +14,6 @@ return new class extends Migration
             $table->text('testimonial');
             $table->timestamps();
             
-            // Satu user hanya bisa punya 1 testimoni
             $table->unique('user_id');
         });
     }

@@ -19,11 +19,8 @@
                                 <label for="testimonial" class="form-label fw-semibold">
                                     <i class="fas fa-comments me-2"></i>Your Testimonial
                                 </label>
-                                <textarea class="form-control @error('testimonial') is-invalid @enderror" 
-                                          id="testimonial" 
-                                          name="testimonial" 
-                                          rows="6" 
-                                          required>{{ old('testimonial', $testimonial->testimonial) }}</textarea>
+                                <textarea class="form-control @error('testimonial') is-invalid @enderror" id="testimonial" name="testimonial"
+                                    rows="6" required>{{ old('testimonial', $testimonial->testimonial) }}</textarea>
                                 @error('testimonial')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

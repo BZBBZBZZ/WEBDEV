@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    // Tampilkan halaman cart
     public function index()
     {
         $cartItems = Auth::user()->carts()->with('product.category')->get();
-        
+
         $total = $cartItems->sum(function ($item) {
             return $item->product->getDiscountedPrice() * $item->quantity;
         });
@@ -21,7 +20,6 @@ class CartController extends Controller
         return view('cart.index', compact('cartItems', 'total'));
     }
 
-    // Tambah produk ke cart
     public function store(Request $request)
     {
         $request->validate([
@@ -43,12 +41,10 @@ class CartController extends Controller
             ]);
         }
 
-        // ✅ REDIRECT KE PREVIOUS PAGE (product detail page)
         return redirect()->back()
             ->with('success', 'Product added to cart!');
     }
 
-    // Update quantity
     public function update(Request $request, Cart $cart)
     {
         $request->validate([
@@ -65,7 +61,6 @@ class CartController extends Controller
             ->with('success', 'Cart updated!');
     }
 
-    // Hapus item dari cart
     public function destroy(Cart $cart)
     {
         if ($cart->user_id !== Auth::id()) {
@@ -78,7 +73,6 @@ class CartController extends Controller
             ->with('success', 'Item removed from cart!');
     }
 
-    // Clear all cart
     public function clear()
     {
         Auth::user()->carts()->delete();

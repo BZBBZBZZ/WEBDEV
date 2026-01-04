@@ -34,7 +34,6 @@ class Product extends Model
         return $this->belongsToMany(Promo::class, 'product_promo');
     }
 
-    // ✅ Relationship query builder (untuk whereHas, exists, dll)
     public function activePromosQuery()
     {
         return $this->promos()
@@ -42,7 +41,6 @@ class Product extends Model
             ->whereDate('end_date', '>=', now());
     }
 
-    // ✅ Get collection of active promos (untuk @foreach)
     public function activePromos()
     {
         return $this->activePromosQuery()->get();
@@ -57,21 +55,21 @@ class Product extends Model
         }
 
         $totalDiscount = $activePromos->sum('discount_percentage');
-        
+
         return min($totalDiscount, 100);
     }
 
     public function getDiscountedPrice()
     {
         $totalDiscount = $this->getTotalDiscount();
-        
+
         if ($totalDiscount == 0) {
-            return (float) $this->price; // ✅ Cast ke float
+            return (float) $this->price;
         }
-        
+
         $discountAmount = $this->price * ($totalDiscount / 100);
-        
-        return (float) max(0, $this->price - $discountAmount); // ✅ Cast ke float
+
+        return (float) max(0, $this->price - $discountAmount);
     }
 
     public function hasActivePromo()

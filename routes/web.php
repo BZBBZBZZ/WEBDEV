@@ -57,7 +57,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/buy-now', [CheckoutController::class, 'buyNow'])->name('buy-now');
         Route::post('/buy-now-process', [CheckoutController::class, 'processBuyNow'])->name('buy-now-process');
 
-        // ✅ AJAX ROUTES
         Route::get('/cities/{province_id}', [CheckoutController::class, 'getCities'])->name('cities');
         Route::get('/districts/{city_id}', [CheckoutController::class, 'getDistricts'])->name('districts');
     });
@@ -77,7 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{transaction}', [TransactionController::class, 'show'])->name('show');
     });
 
-    // ✅ Testimonial Routes (User)
+    // Testimonial Routes (User)
     Route::prefix('testimonials')->name('testimonials.')->group(function () {
         Route::get('/create', [TestimonialController::class, 'create'])->name('create');
         Route::post('/', [TestimonialController::class, 'store'])->name('store');
@@ -87,10 +86,10 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// ✅ Testimonial Index (Public - semua orang bisa lihat)
+// Testimonial semua org
 Route::get('/testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
 
-// Midtrans Callback (tanpa auth)
+// Midtrans Callback
 Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
 
 // Admin Routes
@@ -110,7 +109,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::put('/{transaction}/status', [AdminTransactionController::class, 'updateStatus'])->name('update-status');
     });
 
-    // ✅ Admin Testimonial Routes
+    // Admin Testimonial Routes
     Route::prefix('testimonials')->name('testimonials.')->group(function () {
         Route::get('/', [AdminTestimonialController::class, 'index'])->name('index');
         Route::delete('/{testimonial}', [AdminTestimonialController::class, 'destroy'])->name('destroy');

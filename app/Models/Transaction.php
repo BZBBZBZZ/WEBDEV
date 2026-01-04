@@ -55,7 +55,7 @@ class Transaction extends Model
 
     public function getStatusBadgeAttribute()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'pending' => 'warning',
             'processing' => 'info',
             'shipped' => 'primary',
@@ -67,7 +67,7 @@ class Transaction extends Model
 
     public function getPaymentStatusBadgeAttribute()
     {
-        return match($this->payment_status) {
+        return match ($this->payment_status) {
             'pending' => 'warning',
             'paid' => 'success',
             'failed' => 'danger',

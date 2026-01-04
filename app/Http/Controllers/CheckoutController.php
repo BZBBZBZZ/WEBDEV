@@ -1,5 +1,5 @@
 <?php
-// filepath: app/Http/Controllers/CheckoutController.php
+
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
@@ -42,19 +42,18 @@ class CheckoutController extends Controller
         return view('checkout.index', compact('cartItems', 'provinces', 'subtotal', 'totalWeight'));
     }
 
-    // ✅ GET CITIES (AJAX)
     public function getCities($provinceId)
     {
         try {
             $cities = $this->rajaOngkirService->getCitiesByProvince($provinceId);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $cities
             ]);
         } catch (\Exception $e) {
             Log::error('Get Cities Error', ['message' => $e->getMessage()]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to load cities'
@@ -62,19 +61,18 @@ class CheckoutController extends Controller
         }
     }
 
-    // ✅ GET DISTRICTS (AJAX)
     public function getDistricts($cityId)
     {
         try {
             $districts = $this->rajaOngkirService->getDistrictsByCity($cityId);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $districts
             ]);
         } catch (\Exception $e) {
             Log::error('Get Districts Error', ['message' => $e->getMessage()]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to load districts'
@@ -82,7 +80,6 @@ class CheckoutController extends Controller
         }
     }
 
-    // ✅ CALCULATE SHIPPING (AJAX)
     public function calculateShipping(Request $request)
     {
         try {
@@ -117,7 +114,6 @@ class CheckoutController extends Controller
                 'costs' => $costs,
                 'total_costs' => count($costs)
             ]);
-
         } catch (\Exception $e) {
             Log::error('Calculate Shipping Error', [
                 'message' => $e->getMessage(),
@@ -131,7 +127,6 @@ class CheckoutController extends Controller
         }
     }
 
-    // ✅ PROCESS CHECKOUT
     public function process(Request $request)
     {
         $validated = $request->validate([
@@ -162,7 +157,6 @@ class CheckoutController extends Controller
 
             $totalAmount = $subtotal + $validated['shipping_cost'];
 
-            // ✅ CREATE TRANSACTION (HAPUS postal_code)
             $transaction = Transaction::create([
                 'user_id' => Auth::id(),
                 'transaction_code' => 'TRX-' . strtoupper(uniqid()),
@@ -178,37 +172,33 @@ class CheckoutController extends Controller
                 'subtotal' => $subtotal,
                 'total_amount' => $totalAmount,
                 'status' => 'pending',
-                'payment_status' => 'pending', // ✅ GANTI DARI 'unpaid' → 'pending'
+                'payment_status' => 'pending',
             ]);
 
-            // ✅ CREATE TRANSACTION DETAILS
             foreach ($items as $item) {
                 $transaction->details()->create([
                     'product_id' => $item->product->id,
-                    'product_name' => $item->product->name, // ✅ TAMBAHKAN INI
+                    'product_name' => $item->product->name,
                     'quantity' => $item->quantity,
                     'price' => $item->product->getDiscountedPrice(),
                 ]);
             }
 
-            // ✅ CLEAR CART
             Auth::user()->carts()->delete();
 
             DB::commit();
 
             return redirect()->route('payment.show', $transaction);
-
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Checkout process error: ' . $e->getMessage());
-            
+
             return redirect()->back()
                 ->with('error', 'Failed to process checkout. Please try again.')
                 ->withInput();
         }
     }
 
-    // ✅ FIX BUY NOW METHOD
     public function buyNow(Request $request)
     {
         $request->validate([
@@ -227,12 +217,10 @@ class CheckoutController extends Controller
         $subtotal = $product->getDiscountedPrice() * $request->quantity;
         $provinces = $this->rajaOngkirService->getProvinces();
 
-        // ✅ PASS $product dan $quantity ke view (seperti checkout index)
         return view('checkout.buy-now', compact('product', 'totalWeight', 'subtotal', 'provinces'))
             ->with('quantity', $request->quantity);
     }
 
-    // ✅ PROCESS BUY NOW
     public function processBuyNow(Request $request)
     {
         $validated = $request->validate([
@@ -263,7 +251,6 @@ class CheckoutController extends Controller
             $subtotal = $product->getDiscountedPrice() * $quantity;
             $totalAmount = $subtotal + $validated['shipping_cost'];
 
-            // ✅ CREATE TRANSACTION (HAPUS postal_code)
             $transaction = Transaction::create([
                 'user_id' => Auth::id(),
                 'transaction_code' => 'TRX-' . strtoupper(uniqid()),
@@ -279,12 +266,12 @@ class CheckoutController extends Controller
                 'subtotal' => $subtotal,
                 'total_amount' => $totalAmount,
                 'status' => 'pending',
-                'payment_status' => 'pending', // ✅ GANTI DARI 'unpaid' → 'pending'
+                'payment_status' => 'pending',
             ]);
 
             $transaction->details()->create([
                 'product_id' => $product->id,
-                'product_name' => $product->name, // ✅ TAMBAHKAN INI
+                'product_name' => $product->name,
                 'quantity' => $quantity,
                 'price' => $product->getDiscountedPrice(),
             ]);
@@ -294,11 +281,10 @@ class CheckoutController extends Controller
             DB::commit();
 
             return redirect()->route('payment.show', $transaction);
-
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Buy now checkout process error: ' . $e->getMessage());
-            
+
             return redirect()->back()
                 ->with('error', 'Failed to process buy now checkout. Please try again.')
                 ->withInput();
