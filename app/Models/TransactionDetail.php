@@ -33,17 +33,11 @@ class TransactionDetail extends Model
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * Get formatted price
-     */
     public function getFormattedPriceAttribute()
     {
         return 'Rp ' . number_format($this->price, 0, ',', '.');
     }
 
-    /**
-     * Get formatted subtotal
-     */
     public function getFormattedSubtotalAttribute()
     {
         return 'Rp ' . number_format($this->subtotal, 0, ',', '.');

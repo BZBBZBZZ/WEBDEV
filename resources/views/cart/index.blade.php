@@ -37,7 +37,7 @@
                                 @endif
                             </div>
 
-                            {{-- ✅ HAPUS UPDATE QUANTITY FORM, HANYA TAMPILKAN QTY --}}
+                            
                             <div class="col-md-2">
                                 <p class="mb-0">Qty: <strong>{{ $item->quantity }}</strong></p>
                             </div>

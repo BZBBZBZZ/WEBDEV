@@ -106,7 +106,7 @@
                             </div>
                         </div>
                         
-                        {{-- Add to Cart Form --}}
+                       
                         <form action="{{ route('cart.store') }}" method="POST" id="addToCartForm" class="mb-2">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -116,7 +116,7 @@
                             </button>
                         </form>
 
-                        {{-- ✅ Buy Now Form --}}
+                        
                         <form action="{{ route('checkout.buy-now') }}" method="GET" id="buyNowForm">
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" name="quantity" id="buyQuantity" value="1">
@@ -166,7 +166,7 @@
         function updateHiddenInputs() {
             const qty = quantityInput.value;
             cartQuantityInput.value = qty;
-            buyQuantityInput.value = qty; // ✅ Update buy now quantity juga
+            buyQuantityInput.value = qty; 
         }
     </script>
     @endpush

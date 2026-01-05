@@ -6,7 +6,6 @@
     <div class="container py-5">
         <h2 class="mb-4"><i class="fas fa-cash-register me-2"></i>All Transactions</h2>
 
-        {{-- Filter --}}
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <form method="GET" action="{{ route('admin.transactions.index') }}" class="row g-3">
@@ -34,7 +33,7 @@
             </div>
         </div>
 
-        {{-- Transactions Table --}}
+        
         <div class="card shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
@@ -97,7 +96,7 @@
                     </table>
                 </div>
 
-                {{-- Pagination --}}
+                
                 <div class="d-flex justify-content-center mt-4">
                     {{ $transactions->links() }}
                 </div>

@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            <!-- Checkout Form (sama seperti checkout index) -->
+           
             <div class="col-lg-4">
                 <div class="card shadow-sm mb-3">
                     <div class="card-header bg-success text-white">

@@ -20,7 +20,6 @@
 
         <div class="row">
             <div class="col-lg-8">
-                {{-- Transaction Info --}}
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Transaction Information</h5>
@@ -60,7 +59,7 @@
                     </div>
                 </div>
 
-                {{-- Products --}}
+                
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0"><i class="fas fa-box me-2"></i>Products</h5>
@@ -100,7 +99,7 @@
                     </div>
                 </div>
 
-                {{-- Shipping Info --}}
+                
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0"><i class="fas fa-shipping-fast me-2"></i>Shipping Information</h5>
@@ -114,7 +113,7 @@
             </div>
 
             <div class="col-lg-4">
-                {{-- Update Status --}}
+                
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-warning">
                         <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Update Status</h5>
@@ -140,7 +139,7 @@
                     </div>
                 </div>
 
-                {{-- Order Summary --}}
+                
                 <div class="card shadow-sm">
                     <div class="card-header bg-success text-white">
                         <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>Order Summary</h5>
